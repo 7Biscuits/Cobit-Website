@@ -1,0 +1,35 @@
+:root {
+  --ink: #111820;
+  --soft: #4B5A66;
+  --deep: #2E86C1;
+  --mid: #4FA8DE;
+  --panel: rgba(255, 255, 255, 0.9);
+  --pl: #D6E9F5;
+  --pi: #111820;
+}
+
+:root[data-mode="night"] {
+  --panel: rgba(22, 34, 46, 0.9);
+  --pl: #2A3A46;
+  --pi: #E7F1F8;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: Inter, system-ui, sans-serif;
+  overflow: hidden;
+  background: #EAF6FF;
+}
+
+h1, h2, h3, .logo {
+  font-family: 'Space Grotesk', sans-serif;
+}

@@ -1,0 +1,20 @@
+{
+  "name": "cobit-platform",
+  "version": "1.0.0",
+  "description": "CoBit 3D City & Student Projects Showcase with Supabase backend",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "config": "node scripts/generate-env.js",
+    "build": "node scripts/generate-env.js"
+  },
+  "keywords": [
+    "cobit",
+    "threejs",
+    "supabase",
+    "showcase"
+  ],
+  "author": "CoBit Team",
+  "license": "ISC"
+}

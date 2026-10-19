@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CoBit — Admin Dashboard</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Environment Configuration (Public Client-Safe Variables) -->
+  <script src="../js/env-config.js"></script>
+
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <!-- Admin Stylesheet -->
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div class="admin-app">
+    <!-- Header -->
+    <header class="admin-header">
+      <div class="brand-wrap">
+        <span class="brand-logo">CoBit</span>
+        <span class="admin-badge">Admin Portal</span>
+      </div>
+
+      <div class="user-controls" id="userControls" style="display: none;">
+        <span class="user-email" id="userEmail"></span>
+        <button type="button" class="btn-header-action" id="btnManageAdmins" style="display: none;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          Admins <span id="pendingCountBadge" class="badge-count" style="display: none;">0</span>
+        </button>
+        <button type="button" class="btn-header-action" id="btnAccountSettings" title="Account Settings" aria-label="Account Settings">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="pointer-events: none;"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          <span>Account Settings</span>
+        </button>
+        <button type="button" class="btn-signout" id="btnSignOut">Sign Out</button>
+      </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="admin-main">
+      <!-- 1. Authentication View (Protected access) -->
+      <section class="auth-container" id="authSection">
+        <div class="auth-card">
+          <h2 class="auth-title" id="authTitle">Admin Sign In</h2>
+          <p class="auth-subtitle">Sign in to manage projects, reviews, and uploads.</p>
+
+          <div class="auth-tabs" role="tablist">
+            <button type="button" class="auth-tab-btn active" id="tabSignIn">Sign In</button>
+            <button type="button" class="auth-tab-btn" id="tabSignUp">Register</button>
+          </div>
+
+          <div id="authError" style="display:none;background:var(--danger-bg);color:var(--danger);border:1px solid var(--danger);border-radius:8px;padding:10px 14px;font-size:0.88rem;margin-bottom:16px;"></div>
+
+          <form id="authForm">
+            <div class="form-group">
+              <label class="form-label" for="authEmail">Email Address</label>
+              <input type="email" id="authEmail" class="form-input" placeholder="admin@example.com" autocomplete="username" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="authPassword">Password</label>
+              <input type="password" id="authPassword" class="form-input" placeholder="••••••••••••" autocomplete="current-password" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="authSubmitBtn" style="width: 100%; margin-top: 8px;">
+              Sign In
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <!-- 2. Account Pending Approval State (For registered but unverified admins) -->
+      <section class="pending-container" id="pendingSection" style="display: none;">
+        <div class="pending-card">
+          <div class="pending-icon-wrap">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          </div>
+          <h2 class="pending-title" id="pendingTitle">Account Pending Verification</h2>
+          <p class="pending-desc" id="pendingDesc">
+            Your admin account has been registered, but has not yet been accepted by the overall administrator.
+            To use admin features (viewing, adding, editing, or publishing projects), your account must be verified by <strong>admin@cobit.example</strong>.
+          </p>
+          <div class="pending-user-box">
+            Logged in as: <strong id="pendingUserEmail"></strong>
+          </div>
+          <div class="pending-actions">
+            <button type="button" class="btn btn-primary" id="btnRefreshPendingStatus">Check Status</button>
+            <button type="button" class="btn btn-secondary" id="btnPendingSignOut">Sign Out</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Admin Dashboard View (For verified admins only) -->
+      <section id="dashSection" style="display: none;">
+        <!-- Top Toolbar -->
+        <div class="dash-toolbar">
+          <div class="dash-heading">
+            <h1>Our Projects</h1>
+            <p>Add, edit, publish, and showcase student projects on CoBit's platform.</p>
+          </div>
+          <button type="button" class="btn btn-primary" id="btnNewProject">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Add New Project
+          </button>
+        </div>
+
+        <!-- Metric Cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-card-label">Total Projects</div>
+            <div class="stat-card-value" id="totalCount">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">Published (Live)</div>
+            <div class="stat-card-value" id="pubCount" style="color: var(--success);">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">Drafts (Hidden)</div>
+            <div class="stat-card-value" id="draftCount" style="color: var(--warning);">0</div>
+          </div>
+        </div>
+
+        <!-- Filter & Search Bar -->
+        <div class="filter-bar">
+          <div class="filter-group">
+            <div class="search-input-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="text" id="searchInput" placeholder="Search by title or description...">
+            </div>
+
+            <select id="filterCategory" class="form-select" style="max-width: 180px;">
+              <option value="all">All Tracks</option>
+              <option value="Tech">Tech</option>
+              <option value="Finance">Finance</option>
+              <option value="Innovation">Innovation</option>
+              <option value="Marketing">Marketing</option>
+              <option value="Management">Management</option>
+            </select>
+
+            <select id="filterStatus" class="form-select" style="max-width: 170px;">
+              <option value="all">All Statuses</option>
+              <option value="published">Published Only</option>
+              <option value="draft">Drafts Only</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Projects Table -->
+        <div class="projects-table-wrap">
+          <table class="projects-table">
+            <thead>
+              <tr>
+                <th style="width: 42%;">Project</th>
+                <th style="width: 16%;">Track</th>
+                <th style="width: 16%;">Status</th>
+                <th style="width: 14%;">Date</th>
+                <th style="width: 12%; text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="projectsTableBody">
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+
+          <div id="emptyState" style="display: none; padding: 48px 24px; text-align: center; color: var(--text-muted);">
+            <p style="font-size: 1.1rem; margin-bottom: 6px;">No projects match your filter criteria.</p>
+            <p style="font-size: 0.85rem;">Try adjusting your search query or add a new project.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Project Editor Modal Dialog -->
+    <dialog id="projectEditorModal" class="admin-modal" closedby="any" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="admin-modal-content">
+        <div class="admin-modal-header">
+          <h2 id="modalTitle" class="admin-modal-title">Create New Project</h2>
+          <button type="button" class="btn-icon" onclick="document.getElementById('projectEditorModal').close()" aria-label="Close modal">&times;</button>
+        </div>
+
+        <div class="admin-modal-body">
+          <form id="projectForm">
+            <div class="form-row">
+              <div class="form-group" style="flex: 2;">
+                <label class="form-label" for="projTitle">Project Title *</label>
+                <input type="text" id="projTitle" class="form-input" placeholder="e.g. HealthPulse AI — Symptom Triage" required>
+              </div>
+
+              <div class="form-group" style="flex: 1;">
+                <label class="form-label" for="projCategory">Track / Category *</label>
+                <select id="projCategory" class="form-select" required>
+                  <option value="Tech">Tech</option>
+                  <option value="Finance">Finance</option>
+                  <option value="Innovation">Innovation</option>
+                  <option value="Marketing">Marketing</option>
+                  <option value="Management">Management</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-checkbox-label">
+                <input type="checkbox" id="projPublished" checked>
+                <span><strong>Publish project</strong> (visible immediately on public CoBit showcase)</span>
+              </label>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="projDesc">Description *</label>
+              <textarea id="projDesc" class="form-textarea" placeholder="Detailed explanation of the project, problem solved, tools used, and mentors involved..." rows="4" required></textarea>
+            </div>
+
+            <!-- Cover Image Upload (Supabase Storage) -->
+            <div class="form-group">
+              <label class="form-label">Cover Image (Upload via Supabase Storage or Paste URL)</label>
+              <div class="upload-dropzone">
+                <input type="file" id="coverFileInput" accept="image/*">
+                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                <div class="upload-prompt">Click or drag an image here to upload directly to Supabase Storage</div>
+                <div class="upload-hint">PNG, JPG, WEBP up to 5MB</div>
+              </div>
+              <input type="url" id="coverUrlInput" class="form-input" placeholder="Or paste image URL (e.g. https://...)" style="margin-top: 8px;">
+              <div id="coverPreviewWrap" class="upload-preview-wrap"></div>
+            </div>
+
+            <!-- Proof of Work & Screenshots (Supabase Storage) -->
+            <div class="form-group">
+              <label class="form-label">Additional Screenshots / Proof of Work (Multiple files supported)</label>
+              <div class="upload-dropzone">
+                <input type="file" id="screenshotsFileInput" accept="image/*" multiple>
+                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                <div class="upload-prompt">Upload screenshot files to Supabase Storage (select multiple files)</div>
+                <div class="upload-hint">Architecture diagrams, UI screens, demo proofs</div>
+              </div>
+              <textarea id="screenshotsUrlInput" class="form-textarea" placeholder="Or paste additional screenshot URLs (one per line, press Tab or Enter after pasting)" rows="2" style="margin-top: 8px;"></textarea>
+              <div id="screenshotsPreviewWrap" class="upload-preview-wrap"></div>
+            </div>
+
+            <!-- External Links -->
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="projWebsite">Live Website / Demo Link</label>
+                <input type="url" id="projWebsite" class="form-input" placeholder="https://myproject.demo.com">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="projGithub">GitHub Repository Link</label>
+                <input type="url" id="projGithub" class="form-input" placeholder="https://github.com/myuser/myproject">
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" id="btnCancelEditor">Cancel</button>
+              <button type="submit" class="btn btn-primary" id="btnSaveProject">Save Project</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- Delete Confirmation Modal Dialog -->
+    <dialog id="deleteConfirmModal" class="admin-modal" closedby="any" aria-modal="true" aria-labelledby="deleteModalTitle" style="max-width: 440px;">
+      <div class="admin-modal-content">
+        <div class="admin-modal-header">
+          <h2 id="deleteModalTitle" class="admin-modal-title" style="color: var(--danger);">Delete Project</h2>
+          <button type="button" class="btn-icon" onclick="document.getElementById('deleteConfirmModal').close()" aria-label="Close modal">&times;</button>
+        </div>
+        <div class="admin-modal-body">
+          <p style="margin-bottom: 12px;">Are you sure you want to permanently delete <strong id="deleteProjectTitle">this project</strong>?</p>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 24px;">This action cannot be undone and will remove the project from both the database and public gallery.</p>
+          <div class="form-actions" style="margin-top: 0; padding-top: 0; border: none;">
+            <button type="button" class="btn btn-secondary" id="btnCancelDelete">Cancel</button>
+            <button type="button" class="btn btn-danger" id="btnConfirmDelete">Delete Project</button>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- Account Settings Modal Dialog (Update Email / Password) -->
+    <dialog id="accountSettingsModal" class="admin-modal" closedby="any" aria-modal="true" aria-labelledby="accModalTitle" style="max-width: 480px;">
+      <div class="admin-modal-content">
+        <div class="admin-modal-header">
+          <h2 id="accModalTitle" class="admin-modal-title">Account Settings</h2>
+          <button type="button" class="btn-icon" id="btnCloseAccountModal" aria-label="Close modal">&times;</button>
+        </div>
+        <div class="admin-modal-body">
+          <form id="accountSettingsForm">
+            <div class="form-group">
+              <label class="form-label" for="accCurrentEmail">Current Email</label>
+              <input type="email" id="accCurrentEmail" class="form-input" disabled style="opacity: 0.7; cursor: not-allowed;">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="accNewEmail">New Email Address</label>
+              <input type="email" id="accNewEmail" class="form-input" placeholder="Leave blank to keep current email" autocomplete="email">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="accNewPassword">New Password</label>
+              <input type="password" id="accNewPassword" class="form-input" placeholder="Min. 6 characters (leave blank to keep current)" autocomplete="new-password">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="accConfirmPassword">Confirm New Password</label>
+              <input type="password" id="accConfirmPassword" class="form-input" placeholder="Repeat new password" autocomplete="new-password">
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" id="btnCancelAccountModal">Cancel</button>
+              <button type="submit" class="btn btn-primary" id="btnSaveAccount">Update Credentials</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- Admin Accounts & Approvals Modal Dialog (For admin@cobit.example) -->
+    <dialog id="adminsModal" class="admin-modal" closedby="any" aria-modal="true" aria-labelledby="adminsModalTitle" style="max-width: 760px;">
+      <div class="admin-modal-content">
+        <div class="admin-modal-header">
+          <div>
+            <h2 id="adminsModalTitle" class="admin-modal-title">Admin Account Approvals</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">
+              As the overall administrator (<strong>admin@cobit.example</strong>), approve or revoke access for newly registered admin accounts.
+            </p>
+          </div>
+          <button type="button" class="btn-icon" onclick="document.getElementById('adminsModal').close()" aria-label="Close modal">&times;</button>
+        </div>
+        <div class="admin-modal-body" style="padding: 16px 24px;">
+          <div style="overflow-x: auto;">
+            <table class="admins-table">
+              <thead>
+                <tr>
+                  <th>Admin Email</th>
+                  <th>Status</th>
+                  <th>Registered</th>
+                  <th style="text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminsTableBody">
+                <!-- Dynamically loaded -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- Floating Toast Notifications -->
+    <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+  </div>
+
+  <!-- Admin Controller -->
+  <script type="module" src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,253 @@
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(12px + env(safe-area-inset-top, 0px)) 22px 12px;
+  background: rgba(17, 24, 32, 0.4);
+  backdrop-filter: blur(10px);
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #fff;
+}
+
+.links {
+  display: none;
+  gap: 20px;
+  list-style: none;
+}
+
+.links button {
+  background: none;
+  border: 0;
+  color: #fff;
+  font: 500 0.92rem Inter;
+  cursor: pointer;
+  padding: 6px 2px;
+}
+
+.links button:hover {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+
+#menu {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+@media (min-width: 760px) {
+  .links {
+    display: flex;
+  }
+  #menu {
+    display: none;
+  }
+}
+
+@media (max-width: 759px) {
+  nav.open .links {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(17, 24, 32, 0.95);
+  }
+  nav.open .links button {
+    width: 100%;
+    text-align: left;
+    padding: 14px 22px;
+    font-size: 1rem;
+  }
+}
+
+#c {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  touch-action: none;
+  display: block;
+}
+
+.copy {
+  position: fixed;
+  top: calc(13% + env(safe-area-inset-top, 0px));
+  left: 0;
+  right: 0;
+  text-align: center;
+  padding: 0 20px;
+  pointer-events: none;
+  z-index: 5;
+  transition: opacity 0.3s;
+}
+
+.copy h1 {
+  font-size: clamp(1.6rem, 4.4vw, 2.7rem);
+  color: var(--ink);
+  max-width: 720px;
+  margin: 0 auto 10px;
+}
+
+.copy p {
+  color: var(--soft);
+  max-width: 520px;
+  margin: auto;
+  line-height: 1.5;
+}
+
+:root[data-mode="night"] .copy h1 {
+  color: #F2F7FC;
+}
+
+:root[data-mode="night"] .copy p {
+  color: #AFC4D6;
+}
+
+body.open .copy,
+body.open .hint {
+  opacity: 0;
+}
+
+.hint {
+  position: fixed;
+  bottom: calc(30px + env(safe-area-inset-bottom, 0px));
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--soft);
+  pointer-events: none;
+  padding: 0 140px;
+  z-index: 5;
+}
+
+@media (max-width: 640px) {
+  .hint {
+    display: none;
+  }
+}
+
+#tip {
+  position: fixed;
+  z-index: 20;
+  pointer-events: none;
+  background: var(--ink);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  transform: translate(-50%, -130%);
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+
+#tip.show {
+  opacity: 1;
+}
+
+.pad {
+  position: fixed;
+  left: 18px;
+  bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  z-index: 40;
+  display: none;
+  grid-template-columns: repeat(3, 48px);
+  grid-template-rows: repeat(3, 48px);
+  gap: 5px;
+  transition: opacity 0.3s;
+}
+
+body.open .pad {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.pad button {
+  border: 1px solid var(--pl);
+  background: var(--panel);
+  color: var(--pi);
+  backdrop-filter: blur(6px);
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(17, 24, 32, 0.15);
+  font-size: 1.15rem;
+  border-radius: 10px;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.pad button:active {
+  background: var(--mid);
+  color: #fff;
+}
+
+@media (pointer: coarse), (max-width: 760px) {
+  .pad {
+    display: grid;
+  }
+}
+
+#dnClock {
+  position: fixed;
+  right: 20px;
+  bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+  width: 96px;
+  height: 96px;
+  z-index: 40;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 16px rgba(7, 21, 68, 0.35));
+  transition: opacity 0.3s;
+}
+
+#dnClock svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+#dnArc {
+  transition: stroke-dashoffset 0.5s linear;
+}
+
+#dnClock g {
+  transition: opacity 0.6s;
+}
+
+#dnClock .cl {
+  opacity: 0.6;
+  animation: dnBlink 2s ease-in-out infinite;
+}
+
+@keyframes dnBlink {
+  50% {
+    opacity: 0.2;
+  }
+}
+
+body.open #dnClock {
+  opacity: 0;
+}
+
+#nav, .copy {
+  display: none !important;
+}
