@@ -82,7 +82,13 @@ export function generateClientEnv() {
   // Merge: fileEnv values overridden by system process.env (for Vercel/Netlify/Docker deployments)
   const clientConfig = {};
   for (const key of CLIENT_SAFE_KEYS) {
-    const val = process.env[key] || fileEnv[key] || '';
+    let val = (process.env[key] || fileEnv[key] || '').trim();
+    if (key === 'OVERALL_ADMIN_EMAIL' && !val) {
+      val = 'admin@cobit.example';
+    }
+    if (key === 'STORAGE_BUCKET_NAME' && !val) {
+      val = 'project-media';
+    }
     clientConfig[key] = val;
   }
 
@@ -92,6 +98,20 @@ export function generateClientEnv() {
       delete clientConfig[privKey];
       console.error(`\x1b[31m[SECURITY ALERT] Privileged key "${privKey}" was blocked from client config.\x1b[0m`);
     }
+  }
+
+  // Helpful status reporting (especially for Vercel/CI builds)
+  const isVercel = process.env.VERCEL === '1';
+  if (isVercel) {
+    console.log('\x1b[36m[CoBit] Building on Vercel deployment environment...\x1b[0m');
+  }
+
+  if (!clientConfig.SUPABASE_URL || !clientConfig.SUPABASE_ANON_KEY) {
+    console.warn('\x1b[33m[CoBit] Notice: SUPABASE_URL and/or SUPABASE_ANON_KEY are not defined.\x1b[0m');
+    console.warn('\x1b[33m        To connect to your database in production, configure them in your\x1b[0m');
+    console.warn('\x1b[33m        Vercel Project Settings > Environment Variables.\x1b[0m');
+  } else {
+    console.log(`\x1b[32m[CoBit] Supabase endpoint configured: ${clientConfig.SUPABASE_URL}\x1b[0m`);
   }
 
   // Generate JS file content

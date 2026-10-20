@@ -87,16 +87,17 @@ If you prefer running a static server (like `python3 -m http.server` or VS Code 
 ## Deployment Configuration
 
 ### Deploying to Vercel
-1. Link your repository in Vercel.
-2. In **Project Settings** > **Environment Variables**, add:
+1. Import or link your repository in [Vercel](https://vercel.com).
+2. The project includes a pre-configured [`vercel.json`](file:///Users/rudranshsrivastava/Programming/cobit-main/vercel.json) that automatically handles:
+   - Build command (`npm run build`)
+   - Clean URL routing & rewrites for `/admin`
+   - Cache control and security headers
+3. In **Project Settings** > **Environment Variables**, add:
    - `SUPABASE_URL`
    - `SUPABASE_ANON_KEY`
-   - `OVERALL_ADMIN_EMAIL`
-   - `STORAGE_BUCKET_NAME`
-3. Configure Build Settings:
-   - **Build Command**: `npm run build` (runs `node scripts/generate-env.js`)
-   - **Output Directory**: `.` (Root)
-4. Deploy. Vercel will execute the build command, generating `js/env-config.js` with only the public variables.
+   - `OVERALL_ADMIN_EMAIL` (optional, defaults to `admin@cobit.example`)
+   - `STORAGE_BUCKET_NAME` (optional, defaults to `project-media`)
+4. Click **Deploy**. Vercel will run the build step to generate `js/env-config.js` with client-safe variables and serve your platform instantly.
 
 ### Deploying to Netlify
 1. Link your repository in Netlify.

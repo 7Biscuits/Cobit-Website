@@ -16,5 +16,8 @@
     "showcase"
   ],
   "author": "CoBit Team",
-  "license": "ISC"
+  "license": "ISC",
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }
