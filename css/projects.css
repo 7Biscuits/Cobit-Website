@@ -4,7 +4,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin: 24px 0 32px 0;
+  margin: 20px 0 28px 0;
 }
 
 .pf-btn {
@@ -12,10 +12,14 @@
   color: var(--sf);
   border: 1px solid var(--bd);
   border-radius: 99px;
-  padding: 8px 16px;
-  font: 500 0.88rem Inter, sans-serif;
+  padding: 9px 18px;
+  font: 500 0.88rem Inter, system-ui, sans-serif;
   cursor: pointer;
   transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
 }
 
 .pf-btn:hover {
@@ -31,11 +35,31 @@
   border-color: var(--ac);
 }
 
+@media (max-width: 640px) {
+  .project-filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    margin-left: -18px;
+    margin-right: -18px;
+    padding-left: 18px;
+    padding-right: 18px;
+    padding-bottom: 6px;
+  }
+  .project-filters::-webkit-scrollbar {
+    display: none;
+  }
+  .pf-btn {
+    flex-shrink: 0;
+  }
+}
+
 /* Projects Grid */
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 22px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  gap: clamp(16px, 3vw, 22px);
   margin-top: 10px;
 }
 
@@ -425,4 +449,60 @@
 .pm-link-btn svg {
   width: 18px;
   height: 18px;
+}
+
+/* Tablet & Mobile responsive styles for Project Modal Dialog */
+@media (max-width: 768px) {
+  .project-modal {
+    width: 95vw;
+    max-height: 90vh;
+    max-height: 90dvh;
+    border-radius: 12px;
+  }
+
+  .project-modal-wrapper {
+    max-height: 90vh;
+    max-height: 90dvh;
+  }
+
+  .project-modal-header {
+    padding: 16px 18px 14px;
+    gap: 12px;
+  }
+
+  .project-modal-title {
+    font-size: 1.35rem;
+  }
+
+  .project-modal-body {
+    padding: 18px 16px;
+    gap: 18px;
+  }
+
+  .pm-gallery {
+    padding: 12px;
+  }
+
+  .pm-gallery-thumbs {
+    gap: 8px;
+  }
+
+  .pm-thumb {
+    width: 64px;
+    height: 42px;
+  }
+
+  .pm-description-text {
+    font-size: 0.94rem;
+  }
+
+  .pm-links-section {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pm-link-btn {
+    width: 100%;
+    justify-content: center;
+  }
 }

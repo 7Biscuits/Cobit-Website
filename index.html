@@ -71,9 +71,10 @@
 
   <div id="room" role="dialog" aria-modal="true" aria-label="CoBit website">
     <div id="site" tabindex="-1">
+      <div id="siteNavBackdrop" class="sn-backdrop" aria-hidden="true"></div>
       <header class="sh">
         <span class="logo">CoBit</span>
-        <nav class="sn">
+        <nav class="sn" id="siteNav" aria-label="Website sections">
           <a data-s="home">Home</a>
           <a data-s="about">About</a>
           <a data-s="team">Team</a>
@@ -85,7 +86,19 @@
           <a data-s="partners">Partners</a>
           <a data-s="contact">Contact</a>
         </nav>
-        <button id="back" aria-label="Close website">&#10005; Back to the city</button>
+        <div class="sh-actions">
+          <button id="back" aria-label="Close website">
+            <span class="back-icon" aria-hidden="true">&#10005;</span>
+            <span class="back-text"><span class="back-text-full">Back to the city</span><span class="back-text-short">City</span></span>
+          </button>
+          <button id="siteMenuBtn" class="sh-burger" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="siteNav">
+            <span class="burger-box" aria-hidden="true">
+              <span class="burger-bar"></span>
+              <span class="burger-bar"></span>
+              <span class="burger-bar"></span>
+            </span>
+          </button>
+        </div>
       </header>
 
       <section class="sec hero" id="s-home" data-id="home">

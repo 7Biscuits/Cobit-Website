@@ -64,13 +64,63 @@ export function initModal() {
     site.querySelectorAll('.sn a').forEach(a => a.classList.toggle('on', a.dataset.s === cur));
   }
 
-  if (site) {
-    site.addEventListener('scroll', spy);
-    site.querySelectorAll('.sn a').forEach(a => (a.onclick = () => goSec(a.dataset.s, true)));
-    site.querySelectorAll('[data-go]').forEach(b => (b.onclick = () => goSec(b.dataset.go, true)));
+  // Hamburger navbar controls for the scrollable website modal
+  const siteNav = document.getElementById('siteNav');
+  const siteMenuBtn = document.getElementById('siteMenuBtn');
+  const siteNavBackdrop = document.getElementById('siteNavBackdrop');
+
+  function closeSiteMenu() {
+    if (siteNav) siteNav.classList.remove('open');
+    if (siteMenuBtn) {
+      siteMenuBtn.classList.remove('open');
+      siteMenuBtn.setAttribute('aria-expanded', 'false');
+    }
+    if (siteNavBackdrop) siteNavBackdrop.classList.remove('open');
   }
 
-  exportFunctionOpenClose(room, nav, site, goSec, spy);
+  function toggleSiteMenu() {
+    if (!siteNav || !siteMenuBtn) return;
+    const willOpen = !siteNav.classList.contains('open');
+    siteNav.classList.toggle('open', willOpen);
+    siteMenuBtn.classList.toggle('open', willOpen);
+    siteMenuBtn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+    if (siteNavBackdrop) siteNavBackdrop.classList.toggle('open', willOpen);
+  }
+
+  if (siteMenuBtn) {
+    siteMenuBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      toggleSiteMenu();
+    });
+  }
+
+  if (siteNavBackdrop) {
+    siteNavBackdrop.addEventListener('click', closeSiteMenu);
+  }
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 960 && siteNav && siteNav.classList.contains('open')) {
+      closeSiteMenu();
+    }
+  });
+
+  if (site) {
+    site.addEventListener('scroll', spy);
+    site.querySelectorAll('.sn a').forEach(a => {
+      a.onclick = () => {
+        closeSiteMenu();
+        goSec(a.dataset.s, true);
+      };
+    });
+    site.querySelectorAll('[data-go]').forEach(b => {
+      b.onclick = () => {
+        closeSiteMenu();
+        goSec(b.dataset.go, true);
+      };
+    });
+  }
+
+  exportFunctionOpenClose(room, nav, site, goSec, spy, closeSiteMenu);
 
   // View buttons
   const bPort = document.getElementById('bPort');
@@ -158,9 +208,10 @@ export function initModal() {
 export var openRoom = () => {};
 export var closeRoom = () => {};
 
-function exportFunctionOpenClose(room, nav, site, goSec, spy) {
+function exportFunctionOpenClose(room, nav, site, goSec, spy, closeSiteMenu) {
   openRoom = function(id) {
     if (!room) return;
+    if (typeof closeSiteMenu === 'function') closeSiteMenu();
     if (!ROOMS[id]) id = 'home';
     room.classList.add('open');
     document.body.classList.add('open');
@@ -172,6 +223,7 @@ function exportFunctionOpenClose(room, nav, site, goSec, spy) {
 
   closeRoom = function() {
     if (!room) return;
+    if (typeof closeSiteMenu === 'function') closeSiteMenu();
     room.classList.remove('open');
     document.body.classList.remove('open');
   };
@@ -190,6 +242,13 @@ function exportFunctionOpenClose(room, nav, site, goSec, spy) {
   document.querySelectorAll('.links button').forEach(b => (b.onclick = () => openRoom(b.dataset.r)));
 
   window.addEventListener('keydown', e => {
-    if (e.code === 'Escape') closeRoom();
+    if (e.code === 'Escape') {
+      const siteNav = document.getElementById('siteNav');
+      if (siteNav && siteNav.classList.contains('open')) {
+        if (typeof closeSiteMenu === 'function') closeSiteMenu();
+        return;
+      }
+      closeRoom();
+    }
   });
 }
