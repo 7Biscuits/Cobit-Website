@@ -20,3 +20,6 @@ Thumbs.db
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Reference html file
+CoBit_city_logo_display-2.html
