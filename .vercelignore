@@ -1,0 +1,11 @@
+# Exclude local-only Node HTTP development server from Vercel deployment
+server.js
+
+# Environment secrets and version control
+.env
+.env.local
+.git
+
+# Dependencies & logs
+node_modules
+*.log
