@@ -1,92 +1,276 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>CoBit — Skills before college</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<style>
-:root{--ink:#111820;--soft:#4B5A66;--deep:#2E86C1;--mid:#4FA8DE;--panel:rgba(255,255,255,.9);--pl:#D6E9F5;--pi:#111820}
-:root[data-mode=night]{--panel:rgba(22,34,46,.9);--pl:#2A3A46;--pi:#E7F1F8}
-*{box-sizing:border-box;margin:0;padding:0}html,body{height:100%}
-body{font-family:Inter,system-ui,sans-serif;overflow:hidden;background:#EAF6FF}
-h1,h2,h3,.logo{font-family:'Space Grotesk',sans-serif}
-nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:calc(12px + env(safe-area-inset-top,0px)) 22px 12px;background:rgba(17,24,32,.4);backdrop-filter:blur(10px)}
-.logo{font-weight:700;font-size:1.25rem;color:#fff}
-.links{display:none;gap:20px;list-style:none}.links button{background:none;border:0;color:#fff;font:500 .92rem Inter;cursor:pointer;padding:6px 2px}.links button:hover{text-decoration:underline;text-underline-offset:5px}
-#menu{width:40px;height:40px;border-radius:8px;border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.14);color:#fff;font-size:1.3rem;cursor:pointer}
-@media(min-width:760px){.links{display:flex}#menu{display:none}}
-@media(max-width:759px){nav.open .links{display:flex;flex-direction:column;gap:0;position:absolute;top:100%;left:0;right:0;background:rgba(17,24,32,.95)}nav.open .links button{width:100%;text-align:left;padding:14px 22px;font-size:1rem}}
-#c{position:fixed;inset:0;width:100%;height:100%;cursor:grab;touch-action:none;display:block}
-.copy{position:fixed;top:calc(13% + env(safe-area-inset-top,0px));left:0;right:0;text-align:center;padding:0 20px;pointer-events:none;z-index:5;transition:opacity .3s}
-.copy h1{font-size:clamp(1.6rem,4.4vw,2.7rem);color:var(--ink);max-width:720px;margin:0 auto 10px}.copy p{color:var(--soft);max-width:520px;margin:auto;line-height:1.5}
-:root[data-mode=night] .copy h1{color:#F2F7FC}:root[data-mode=night] .copy p{color:#AFC4D6}
-body.open .copy,body.open .hint{opacity:0}
-.hint{position:fixed;bottom:calc(30px + env(safe-area-inset-bottom,0px));left:0;right:0;text-align:center;font-size:.82rem;color:var(--soft);pointer-events:none;padding:0 140px;z-index:5}
-@media(max-width:640px){.hint{display:none}}
-#tip{position:fixed;z-index:20;pointer-events:none;background:var(--ink);color:#fff;padding:6px 12px;border-radius:6px;font-size:.82rem;transform:translate(-50%,-130%);opacity:0;transition:opacity .12s}#tip.show{opacity:1}
-.pad{position:fixed;left:18px;bottom:calc(24px + env(safe-area-inset-bottom,0px));z-index:40;display:none;grid-template-columns:repeat(3,48px);grid-template-rows:repeat(3,48px);gap:5px;transition:opacity .3s}body.open .pad{opacity:0;pointer-events:none}
-.pad button{border:1px solid var(--pl);background:var(--panel);color:var(--pi);backdrop-filter:blur(6px);cursor:pointer;box-shadow:0 4px 14px rgba(17,24,32,.15);font-size:1.15rem;border-radius:10px;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}.pad button:active{background:var(--mid);color:#fff}
-@media(pointer:coarse),(max-width:760px){.pad{display:grid}}
-#room{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;background:rgba(3,8,14,.7);backdrop-filter:blur(5px)}
-#room.open{opacity:1;pointer-events:auto}
-#site{--bg:#0B1219;--pn:#121D28;--bd:#223243;--tx:#E7F1F8;--sf:#A9BDCC;--ac:#4FA8DE;--ac2:#7CC4F0;position:relative;width:min(1080px,96vw);height:min(92vh,100%);overflow-y:auto;overflow-x:hidden;background:var(--bg);color:var(--tx);border-radius:14px;border:1px solid var(--bd);box-shadow:0 30px 80px rgba(0,0,0,.65);scroll-behavior:smooth;outline:0;color-scheme:dark;transform:translateY(18px) scale(.985);transition:transform .35s}
-#room.open #site{transform:none}
-@media(max-width:700px){#site{width:100vw;height:100%;border-radius:0;border:0}}
-#site::-webkit-scrollbar{width:10px}#site::-webkit-scrollbar-thumb{background:#2A3C4E;border-radius:6px}#site::-webkit-scrollbar-track{background:var(--bg)}
-.sh{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:18px;padding:12px 22px;background:rgba(11,18,25,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--bd)}
-.sh .logo{color:#fff;font-size:1.3rem;margin-right:auto}
-.sn{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}.sn::-webkit-scrollbar{display:none}
-.sn a{color:var(--sf);font:500 .9rem Inter;padding:7px 12px;border-radius:99px;cursor:pointer;white-space:nowrap;text-decoration:none}.sn a:hover{background:#1A2836;color:#fff}.sn a.on{background:var(--ac);color:#06121C}
-#back{flex:none;background:#1A2836;color:#fff;border:1px solid var(--bd);border-radius:99px;padding:9px 16px;font:500 .88rem Inter;cursor:pointer}#back:hover{background:var(--ac);color:#06121C;border-color:var(--ac)}
-@media(max-width:700px){.sh{flex-wrap:wrap;gap:8px;padding:10px 14px}.sh .logo{order:1}#back{order:2}.sn{order:3;width:100%}}
-.sec{padding:72px 6vw;scroll-margin-top:60px;background:var(--bg)}.sec.alt{background:#0E1721;border-block:1px solid var(--bd)}.sec.dark{background:#08101A}
-.in{max-width:860px;margin:0 auto}
-.eb{display:inline-block;font:600 .78rem Inter;letter-spacing:.12em;text-transform:uppercase;color:var(--ac2);margin-bottom:12px}
-.sec h2{font-size:clamp(1.7rem,4vw,2.5rem);line-height:1.15;margin-bottom:16px;color:#fff}
-.sec p{color:var(--sf);line-height:1.7;margin-bottom:14px;font-size:1.02rem;max-width:62ch}
-.hero{background:radial-gradient(900px 420px at 80% -10%,rgba(79,168,222,.35),transparent 60%),linear-gradient(160deg,#0A121B 0%,#10304A 60%,#14527E 100%);padding:96px 6vw 88px}.hero h2{font-size:clamp(2rem,5.4vw,3.4rem);max-width:16ch}.hero p{color:#C7DCEC;font-size:1.12rem}
-.btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
-.bt{border:0;border-radius:99px;padding:13px 24px;font:600 .96rem Inter;cursor:pointer;background:var(--ac);color:#06121C}.bt:hover{background:var(--ac2)}.bt.o{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.55)}.bt.o:hover{background:rgba(255,255,255,.1)}
-.tri,.cards,.steps{display:grid;gap:16px;margin-top:26px}
-.tri{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}.cards{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}.steps{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
-.cd{background:var(--pn);border:1px solid var(--bd);border-radius:14px;padding:22px;transition:border-color .2s,transform .2s}.cd:hover{border-color:#34506A;transform:translateY(-2px)}.cd h3{font-size:1.08rem;color:var(--ac2);margin-bottom:6px}.sec .cd p{font-size:.93rem;margin:0;line-height:1.55;color:var(--sf)}
-.cd .n{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--ac);color:#06121C;font:700 .95rem 'Space Grotesk';margin-bottom:12px}
-.sec .chip{font-size:.9rem;padding:8px 18px;margin:6px 8px 0 0;background:var(--pn);border-color:var(--bd);color:var(--ac2)}
-.ft{background:#060C12;border-top:1px solid var(--bd);padding:48px 6vw;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;scroll-margin-top:60px}
-.ft .logo{display:block;color:#fff;font-size:1.6rem;margin-bottom:6px}
-.ft .tg{color:var(--sf);font-size:.98rem;margin:0 auto 6px;max-width:44ch}
-.ft h3{color:var(--ac2);font:600 .78rem Inter;letter-spacing:.12em;text-transform:uppercase;margin:0 0 14px}
-.so{display:flex;justify-content:center;gap:16px;flex-wrap:wrap}
-.so a{--bg:#16222E;width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:var(--bg);border:1px solid var(--bd);color:#fff;transition:transform .2s,background .2s,border-color .2s}
-.so a svg{width:26px;height:26px;display:block}.so a:hover{transform:translateY(-3px);border-color:transparent}
-.so a.ig:hover{background:linear-gradient(45deg,#F9A03F,#E1306C 55%,#7B3FE4)}.so a.li:hover{--bg:#0A66C2;background:#0A66C2}.so a.gm:hover{background:#EA4335}
-.so a:focus-visible{outline:2px solid var(--ac2);outline-offset:3px}
-.ft .em{display:inline-block;margin-top:18px;color:#fff;font-weight:500;text-decoration:none;border-bottom:1px solid #34506A}.ft .em:hover{color:var(--ac2)}
-.ft .cp{margin-top:34px;padding-top:20px;border-top:1px solid var(--bd);color:#6F8597;font-size:.84rem}
-#dnClock{position:fixed;right:20px;bottom:calc(22px + env(safe-area-inset-bottom,0px));width:96px;height:96px;z-index:40;pointer-events:none;filter:drop-shadow(0 6px 16px rgba(7,21,68,.35));transition:opacity .3s}#dnClock svg{width:100%;height:100%;display:block;overflow:visible}
-#dnArc{transition:stroke-dashoffset .5s linear}#dnClock g{transition:opacity .6s}#dnClock .cl{opacity:.6;animation:dnBlink 2s ease-in-out infinite}@keyframes dnBlink{50%{opacity:.2}}
-body.open #dnClock{opacity:0}
-#nav,.copy{display:none!important}
-</style></head><body>
-<nav id="nav"><div class="logo">CoBit</div><ul class="links" id="links">
-<li><button data-r="about">About</button></li><li><button data-r="workshops">Workshops</button></li><li><button data-r="mentors">Mentors</button></li><li><button data-r="competitions">Competitions</button></li><li><button data-r="partners">Partners</button></li><li><button data-r="contact">Contact</button></li></ul>
-<button id="menu" aria-label="Menu">☰</button></nav>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>CoBit — Skills before college</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="/js/env-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav id="nav">
+    <div class="logo">CoBit</div>
+    <ul class="links" id="links">
+      <li><button data-r="about">About</button></li>
+      <li><button data-r="team">Team</button></li>
+      <li><button data-r="workshops">Workshops</button></li>
+      <li><button data-r="projects">Projects</button></li>
+      <li><button data-r="mentors">Mentors</button></li>
+      <li><button data-r="competitions">Competitions</button></li>
+      <li><button data-r="partners">Partners</button></li>
+      <li><button data-r="contact">Contact</button></li>
+    </ul>
+    <button id="menu" aria-label="Menu">☰</button>
+  </nav>
 <canvas id="c" aria-label="Interactive 3D city"></canvas>
 <div id="dnClock" role="timer" aria-label="Time of day"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="47" fill="#071544" fill-opacity=".94"/><circle cx="50" cy="50" r="40" fill="none" stroke="#0F56FE" stroke-opacity=".28" stroke-width="3"/><circle id="dnArc" cx="50" cy="50" r="40" fill="none" stroke="#0F56FE" stroke-width="3" stroke-linecap="round" stroke-dasharray="251.33" stroke-dashoffset="188" transform="rotate(-90 50 50)"/><g transform="translate(43.5 21) scale(.58)" fill="none" stroke-linecap="round" stroke-linejoin="round"><g id="dnSunI" stroke="#8FB4FF" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2.8v2.2M12 19v2.2M2.8 12H5M19 12h2.2M5.5 5.5l1.5 1.5M17 17l1.5 1.5M18.5 5.5L17 7M7 17l-1.5 1.5"/></g><g id="dnMoonI" stroke="#8FB4FF" stroke-width="2" opacity="0"><path d="M20 14.2A8.2 8.2 0 0 1 9.8 4a8.2 8.2 0 1 0 10.2 10.2z"/></g></g><text x="50" y="62" text-anchor="middle" font-size="20" font-weight="600" fill="#fff" letter-spacing="1" font-family="'Space Grotesk',Inter,Arial,sans-serif" style="font-variant-numeric:tabular-nums"><tspan id="dnH">06</tspan><tspan class="cl">:</tspan><tspan id="dnM">00</tspan></text></svg></div>
 <div class="copy"><h1>Pick your future before college does.</h1><p>Hands-on career workshops in your school, led by working mentors.</p></div>
 <div class="hint">Drag to look · WASD to move · Click a landmark to step inside</div>
 <div id="tip"></div>
 <div class="pad"><button data-d="f" style="grid-column:2;grid-row:1">▲</button><button data-d="l" style="grid-column:1;grid-row:2">◀</button><button data-d="r" style="grid-column:3;grid-row:2">▶</button><button data-d="b" style="grid-column:2;grid-row:3">▼</button></div>
-<div id="room" role="dialog" aria-modal="true" aria-label="CoBit website"><div id="site" tabindex="-1">
-<header class="sh"><span class="logo">CoBit</span><nav class="sn"><a data-s="home">Home</a><a data-s="about">About</a><a data-s="workshops">Workshops</a><a data-s="how">How it works</a><a data-s="mentors">Mentors</a><a data-s="competitions">Competitions</a><a data-s="partners">Partners</a><a data-s="contact">Contact</a></nav><button id="back" aria-label="Close website">&#10005; Back to the city</button></header>
+  <div id="room" role="dialog" aria-modal="true" aria-label="CoBit website">
+    <div id="site" tabindex="-1">
+      <div id="siteNavBackdrop" class="sn-backdrop" aria-hidden="true"></div>
+      <header class="sh">
+        <span class="logo">CoBit</span>
+        <nav class="sn" id="siteNav" aria-label="Website sections">
+          <a data-s="home">Home</a>
+          <a data-s="about">About</a>
+          <a data-s="team">Team</a>
+          <a data-s="workshops">Workshops</a>
+          <a data-s="projects">Projects</a>
+          <a data-s="how">How it works</a>
+          <a data-s="mentors">Mentors</a>
+          <a data-s="competitions">Competitions</a>
+          <a data-s="partners">Partners</a>
+          <a data-s="contact">Contact</a>
+        </nav>
+        <div class="sh-actions">
+          <button id="back" aria-label="Close website">
+            <span class="back-icon" aria-hidden="true">&#10005;</span>
+            <span class="back-text"><span class="back-text-full">Back to the city</span><span class="back-text-short">City</span></span>
+          </button>
+          <button id="siteMenuBtn" class="sh-burger" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="siteNav">
+            <span class="burger-box" aria-hidden="true">
+              <span class="burger-bar"></span>
+              <span class="burger-bar"></span>
+              <span class="burger-bar"></span>
+            </span>
+          </button>
+        </div>
+      </header>
 
-<section class="sec hero" id="s-home" data-id="home"><div class="in"><span class="eb">Skills before college</span><h2>Pick your future before college does.</h2><p>Hands-on career workshops in your school, led by working mentors.</p><div class="btns"><button class="bt" data-go="workshops">See the workshops</button><button class="bt o" data-go="contact">Bring CoBit to your school</button></div></div></section>
+      <section class="sec hero" id="s-home" data-id="home">
+        <div class="in">
+          <span class="eb">Skills before college</span>
+          <h2>Pick your future before college does.</h2>
+          <p>Hands-on career workshops in your school, led by working mentors.</p>
+          <div class="btns">
+            <button class="bt" data-go="workshops">See the workshops</button>
+            <button class="bt o" data-go="contact">Bring CoBit to your school</button>
+          </div>
+        </div>
+      </section>
 
-<section class="sec" id="s-about" data-id="about"><div class="in"><span class="eb">About CoBit</span><h2>Try a career before you choose one.</h2><p>Most students pick a career before they have ever tried one. We bring a working version of tech, finance, marketing, management and startup life into schools, a few hours at a time, so the choice is made with real experience instead of a guess.</p>
-<div class="tri"><div class="cd"><h3>Real experience</h3><p>Students do the work, not just hear about it.</p></div><div class="cd"><h3>In your school</h3><p>We come to the classroom, so every student can take part.</p></div><div class="cd"><h3>A few hours at a time</h3><p>Short, focused sessions that fit around the school day.</p></div></div></div></section>
+      <section class="sec" id="s-about" data-id="about">
+        <div class="in">
+          <span class="eb">About Us</span>
+          <h2>Empowering students with firsthand career experience.</h2>
+          <p>Most students are expected to pick a lifetime career before they have ever tried one. We bring a working version of tech, finance, marketing, management, and startup life directly into schools, so life choices are made with authentic confidence instead of guesswork.</p>
+          
+          <div class="vmp-grid">
+            <div class="vmp-card">
+              <span class="vmp-tag">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                Vision
+              </span>
+              <h3>Clarity Before Choice</h3>
+              <p>A future where every young person embarks on higher education and vocational journeys grounded in authentic, firsthand workplace understanding.</p>
+            </div>
+            
+            <div class="vmp-card">
+              <span class="vmp-tag">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                Mission
+              </span>
+              <h3>Active Simulation in Schools</h3>
+              <p>To bring practical, mentor-led industry simulations into high school classrooms — connecting students with active professionals, real toolsets, and startup internships.</p>
+            </div>
+            
+            <div class="vmp-card">
+              <span class="vmp-tag">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                Purpose
+              </span>
+              <h3>Democratizing Opportunity</h3>
+              <p>To replace passive career lectures with active doing, breaking down informational and socioeconomic barriers to high-impact modern industries.</p>
+            </div>
+          </div>
 
-<section class="sec alt" id="s-workshops" data-id="workshops"><div class="in"><span class="eb">Workshops</span><h2>Five hands-on tracks, run in-school.</h2><p>Pick the tracks that fit your students. Each one is a working version of the real thing.</p>
-<div class="cards"><div class="cd"><h3>Tech</h3><p>Build something that runs: apps, sites, and how software gets made.</p></div><div class="cd"><h3>Finance</h3><p>Budgets, markets and money decisions with real numbers.</p></div><div class="cd"><h3>Marketing</h3><p>Pitch a product, position a brand, learn why campaigns work.</p></div><div class="cd"><h3>Management</h3><p>Run a team, ship a project, make a manager&#39;s calls.</p></div><div class="cd"><h3>Innovation &amp; Startups</h3><p>Turn a rough idea into a pitch a mentor would back.</p></div></div></div></section>
+          <div class="tri" style="margin-top: 24px;">
+            <div class="cd">
+              <h3>Real experience</h3>
+              <p>Students do the actual work, not just hear about it.</p>
+            </div>
+            <div class="cd">
+              <h3>In your school</h3>
+              <p>We come to the classroom, so every student can take part.</p>
+            </div>
+            <div class="cd">
+              <h3>A few hours at a time</h3>
+              <p>Short, focused sessions that fit smoothly around the school day.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec alt" id="s-team" data-id="team">
+        <div class="in">
+          <span class="eb">Our Team</span>
+          <h2>The builders, educators, and leaders behind CoBit.</h2>
+          <p>We are a dedicated team of educators, engineers, and startup founders committed to closing the divide between high school curriculum and modern career reality.</p>
+          
+          <div class="team-grid">
+            <div class="team-card">
+              <div class="team-avatar-wrap">
+                <img class="team-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80" alt="Aarav Mehta" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' fill=\'%23172433\'/><text x=\'50\' y=\'56\' text-anchor=\'middle\' fill=\'%234FA8DE\' font-size=\'32\' font-family=\'sans-serif\'>AM</text></svg>'">
+              </div>
+              <h3>Aarav Mehta</h3>
+              <span class="team-role">Founder &amp; CEO</span>
+              <p class="team-bio">Former edtech product strategist with 8+ years building experiential learning programs. Passionate about empowering students to discover their life calling before taking on college debt.</p>
+              <div class="team-social">
+                <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="Aarav Mehta LinkedIn" title="LinkedIn">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76a1.5 1.5 0 0 0 0-3 1.5 1.5 0 0 0 0 3m1.4 9.74v-8.37H5.06v8.37h2.8z"/></svg>
+                </a>
+                <a href="https://x.com" target="_blank" rel="noopener" aria-label="Aarav Mehta X (Twitter)" title="X (Twitter)">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+                <a href="mailto:aarav@cobit.example" aria-label="Email Aarav Mehta" title="Email">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                </a>
+              </div>
+            </div>
+
+            <div class="team-card">
+              <div class="team-avatar-wrap">
+                <img class="team-avatar" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop&q=80" alt="Dr. Elena Rostova" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' fill=\'%23172433\'/><text x=\'50\' y=\'56\' text-anchor=\'middle\' fill=\'%234FA8DE\' font-size=\'32\' font-family=\'sans-serif\'>ER</text></svg>'">
+              </div>
+              <h3>Dr. Elena Rostova</h3>
+              <span class="team-role">Head of Curriculum &amp; Learning</span>
+              <p class="team-bio">Cognitive scientist and former STEM principal. Translates real industry tools and workflows into engaging classroom micro-modules that fit school hours.</p>
+              <div class="team-social">
+                <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="Dr. Elena Rostova LinkedIn" title="LinkedIn">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76a1.5 1.5 0 0 0 0-3 1.5 1.5 0 0 0 0 3m1.4 9.74v-8.37H5.06v8.37h2.8z"/></svg>
+                </a>
+                <a href="https://github.com" target="_blank" rel="noopener" aria-label="Dr. Elena Rostova GitHub" title="GitHub">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>
+                </a>
+                <a href="mailto:elena@cobit.example" aria-label="Email Dr. Elena Rostova" title="Email">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                </a>
+              </div>
+            </div>
+
+            <div class="team-card">
+              <div class="team-avatar-wrap">
+                <img class="team-avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80" alt="Marcus Vance" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' fill=\'%23172433\'/><text x=\'50\' y=\'56\' text-anchor=\'middle\' fill=\'%234FA8DE\' font-size=\'32\' font-family=\'sans-serif\'>MV</text></svg>'">
+              </div>
+              <h3>Marcus Vance</h3>
+              <span class="team-role">Director of Industry Partnerships</span>
+              <p class="team-bio">Startup ecosystem builder and venture mentor. Bridges CoBit students with top talent across 40+ startup partners for competitions and paid internships.</p>
+              <div class="team-social">
+                <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="Marcus Vance LinkedIn" title="LinkedIn">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76a1.5 1.5 0 0 0 0-3 1.5 1.5 0 0 0 0 3m1.4 9.74v-8.37H5.06v8.37h2.8z"/></svg>
+                </a>
+                <a href="https://x.com" target="_blank" rel="noopener" aria-label="Marcus Vance X (Twitter)" title="X (Twitter)">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+                <a href="mailto:marcus@cobit.example" aria-label="Email Marcus Vance" title="Email">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                </a>
+              </div>
+            </div>
+
+            <div class="team-card">
+              <div class="team-avatar-wrap">
+                <img class="team-avatar" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&auto=format&fit=crop&q=80" alt="Priya Sharma" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' fill=\'%23172433\'/><text x=\'50\' y=\'56\' text-anchor=\'middle\' fill=\'%234FA8DE\' font-size=\'32\' font-family=\'sans-serif\'>PS</text></svg>'">
+              </div>
+              <h3>Priya Sharma</h3>
+              <span class="team-role">Head of Student Operations</span>
+              <p class="team-bio">Youth development specialist and former community director. Coordinates mentor pairing, on-campus workshop logistics, and student internship cohorts.</p>
+              <div class="team-social">
+                <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="Priya Sharma LinkedIn" title="LinkedIn">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76a1.5 1.5 0 0 0 0-3 1.5 1.5 0 0 0 0 3m1.4 9.74v-8.37H5.06v8.37h2.8z"/></svg>
+                </a>
+                <a href="https://github.com" target="_blank" rel="noopener" aria-label="Priya Sharma GitHub" title="GitHub">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>
+                </a>
+                <a href="mailto:priya@cobit.example" aria-label="Email Priya Sharma" title="Email">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec alt" id="s-workshops" data-id="workshops">
+        <div class="in">
+          <span class="eb">Workshops</span>
+          <h2>Five hands-on tracks, run in-school.</h2>
+          <p>Pick the tracks that fit your students. Each one is a working version of the real thing.</p>
+          <div class="cards">
+            <div class="cd">
+              <h3>Tech</h3>
+              <p>Build something that runs: apps, sites, and how software gets made.</p>
+            </div>
+            <div class="cd">
+              <h3>Finance</h3>
+              <p>Budgets, markets and money decisions with real numbers.</p>
+            </div>
+            <div class="cd">
+              <h3>Marketing</h3>
+              <p>Pitch a product, position a brand, learn why campaigns work.</p>
+            </div>
+            <div class="cd">
+              <h3>Management</h3>
+              <p>Run a team, ship a project, make a manager's calls.</p>
+            </div>
+            <div class="cd">
+              <h3>Innovation &amp; Startups</h3>
+              <p>Turn a rough idea into a pitch a mentor would back.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec" id="s-projects" data-id="projects">
+        <div class="in">
+          <span class="eb">Our Projects</span>
+          <h2>Built by students. Powered by real tools.</h2>
+          <p>Real-world applications, tools, and venture prototypes crafted by CoBit students in our mentor-led career workshops.</p>
+
+          <div class="project-filters" id="projectFilters" role="tablist" aria-label="Filter projects by track">
+            <button type="button" class="pf-btn on" data-category="all">All Tracks</button>
+            <button type="button" class="pf-btn" data-category="Tech">Tech</button>
+            <button type="button" class="pf-btn" data-category="Finance">Finance</button>
+            <button type="button" class="pf-btn" data-category="Innovation">Innovation</button>
+            <button type="button" class="pf-btn" data-category="Marketing">Marketing</button>
+          </div>
+
+          <div id="projectsGrid" class="projects-grid" aria-live="polite">
+            <!-- Dynamically populated from Supabase -->
+          </div>
+        </div>
+      </section>
 
 <section class="sec" id="s-how" data-id="how"><div class="in"><span class="eb">How it works</span><h2>From classroom to first resume line.</h2>
 <div class="steps"><div class="cd"><span class="n">1</span><h3>Workshop</h3><p>A hands-on track runs in your school.</p></div><div class="cd"><span class="n">2</span><h3>Mentor</h3><p>A working professional leads every session.</p></div><div class="cd"><span class="n">3</span><h3>Competition</h3><p>Each series closes with a competition judged by mentors.</p></div><div class="cd"><span class="n">4</span><h3>Internship</h3><p>The strongest performers are recommended to partner startups.</p></div></div></div></section>
@@ -104,7 +288,41 @@ body.open #dnClock{opacity:0}
 <a class="gm" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=cobit.labs%40gmail.com&amp;su=CoBit%20enquiry" target="_blank" rel="noopener" aria-label="Email CoBit" title="Email us"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.2V18a1 1 0 0 0 1 1h3.2V10.6L12 14.2l4.8-3.6V19H20a1 1 0 0 0 1-1V7.2c0-1.6-1.8-2.5-3.1-1.6L12 10 6.1 5.6C4.8 4.7 3 5.6 3 7.2z" fill="currentColor"/></svg></a>
 </div>
 </footer>
-</div></div>
+    </div>
+  </div>
+
+  <!-- Project Details & Gallery Modal Dialog -->
+  <dialog id="projectModal" class="project-modal" closedby="any" aria-modal="true" aria-labelledby="modalProjectTitle">
+    <div class="project-modal-wrapper">
+      <div class="project-modal-header">
+        <div class="project-modal-header-info">
+          <span class="project-modal-category">Track</span>
+          <h2 id="modalProjectTitle" class="project-modal-title">Project Details</h2>
+        </div>
+        <button type="button" class="project-modal-close-btn" aria-label="Close project dialog">&times;</button>
+      </div>
+      <div class="project-modal-body">
+        <div class="pm-gallery">
+          <div class="pm-gallery-heading">
+            <span>Proof of Work &amp; Gallery</span>
+            <span class="pm-gallery-count"></span>
+          </div>
+          <div class="pm-gallery-main">
+            <img class="pm-gallery-main-img" src="" alt="Project image preview">
+          </div>
+          <div class="pm-gallery-thumbs" role="tablist" aria-label="Project screenshot thumbnails"></div>
+        </div>
+
+        <div>
+          <h3 class="pm-description-title">About this project</h3>
+          <p class="pm-description-text"></p>
+        </div>
+
+        <div class="pm-links-section"></div>
+      </div>
+    </div>
+  </dialog>
+
 <script>
 var LAMPREC=[],XRD=[],NOBU=[],HOUSEPOS=[],STSP=[],HOMES=[],HOUSEFP=[];function inHouse(x,z,m){for(const f of HOUSEFP){const dx=x-f[0],dz=z-f[1],c=Math.cos(f[2]),s=Math.sin(f[2]),lx=dx*c-dz*s,lz=dx*s+dz*c;if(Math.abs(lx)<4.8+m&&lz>-3.4-m&&lz<7.2+m)return true}return false}
 "use strict";
@@ -112,6 +330,7 @@ const $=s=>document.querySelector(s),clamp=(v,a,b)=>Math.min(b,Math.max(a,v)),le
 let sd=11;const R=()=>(sd=sd*16807%2147483647)/2147483647,rnd=(a,b)=>a+(b-a)*R(),pick=a=>a[Math.floor(R()*a.length)];
 const ROOMS={
 about:['About CoBit','<p>Most students pick a career before they have ever tried one. We bring a working version of tech, finance, marketing, management and startup life into schools, a few hours at a time, so the choice is made with real experience instead of a guess.</p>'],
+team:['Our Team','<p>Meet the educators, technologists, and industry mentors driving CoBit.</p>'],
 workshops:['Workshops','<p>Five hands-on tracks, run in-school.</p><div class="g"><div><h3>Tech</h3><p>Build something that runs: apps, sites, and how software gets made.</p></div><div><h3>Finance</h3><p>Budgets, markets and money decisions with real numbers.</p></div><div><h3>Marketing</h3><p>Pitch a product, position a brand, learn why campaigns work.</p></div><div><h3>Management</h3><p>Run a team, ship a project, make a manager\'s calls.</p></div><div><h3>Innovation &amp; Startups</h3><p>Turn a rough idea into a pitch a mentor would back.</p></div></div>'],
 mentors:['Mentors','<p>Every workshop is led by a mentor working in that field right now. Students ask what they cannot ask in a classroom, and hear from someone building a career in it.</p>'],
 competitions:['Competitions & Internships','<p>Each workshop series closes with a competition. Mentors judge, and the strongest performers are recommended for internships at our partner startups, a first resume line years before college.</p>'],
@@ -2597,20 +2816,47 @@ const end=e=>{ptr.delete(e.pointerId);if(ptr.size<2)pinch=null;if(!ptr.size&&!mo
 cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);
 cv.addEventListener('wheel',e=>{e.preventDefault();rad=clamp(rad+e.deltaY*.12,25,300);fly=null},{passive:false});
 const KD={KeyW:'f',ArrowUp:'f',KeyS:'b',ArrowDown:'b',KeyA:'l',ArrowLeft:'l',KeyD:'r',ArrowRight:'r'};
-addEventListener('keydown',e=>{if(KD[e.code]&&!document.body.classList.contains('open')){mv[KD[e.code]]=1;fly=null}if(e.code=='Escape')closeRoom()});
+addEventListener('keydown',e=>{if(KD[e.code]&&!document.body.classList.contains('open')){mv[KD[e.code]]=1;fly=null}if(e.code=='Escape'){if(siteNav&&siteNav.classList.contains('open')){closeSiteMenu();return}closeRoom()}});
 addEventListener('keyup',e=>{if(KD[e.code])mv[KD[e.code]]=0});
 document.querySelectorAll('.pad button').forEach(b=>{const d=b.dataset.d;b.addEventListener('pointerdown',e=>{e.preventDefault();mv[d]=1;fly=null});['pointerup','pointerleave','pointercancel'].forEach(v=>b.addEventListener(v,()=>mv[d]=0))});
 
 /* rooms + nav */
 const room=$('#room'),nav=$('#nav'),site=$('#site'),SEC={};site.querySelectorAll('.sec,.ft').forEach(e=>SEC[e.dataset.id]=e);
-ROOMS.home=['CoBit'];ROOMS.how=['How it works'];
-function goSec(id,smooth){const e=SEC[id]||SEC.home,h=site.querySelector('.sh').offsetHeight;site.style.scrollBehavior=smooth?'smooth':'auto';site.scrollTop=id=='home'||!SEC[id]?0:e.getBoundingClientRect().top-site.getBoundingClientRect().top+site.scrollTop-h+1;if(!smooth)setTimeout(()=>site.style.scrollBehavior='',0)}
+ROOMS.home=['CoBit'];ROOMS.how=['How it works'];ROOMS.team=['Our Team'];ROOMS.projects=['Our Projects'];
+
+const siteNav=$('#siteNav'),siteMenuBtn=$('#siteMenuBtn'),siteNavBackdrop=$('#siteNavBackdrop');
+function closeSiteMenu(){
+  if(siteNav)siteNav.classList.remove('open');
+  if(siteMenuBtn){siteMenuBtn.classList.remove('open');siteMenuBtn.setAttribute('aria-expanded','false')}
+  if(siteNavBackdrop)siteNavBackdrop.classList.remove('open');
+}
+function toggleSiteMenu(){
+  if(!siteNav||!siteMenuBtn)return;
+  const willOpen=!siteNav.classList.contains('open');
+  siteNav.classList.toggle('open',willOpen);
+  siteMenuBtn.classList.toggle('open',willOpen);
+  siteMenuBtn.setAttribute('aria-expanded',willOpen?'true':'false');
+  if(siteNavBackdrop)siteNavBackdrop.classList.toggle('open',willOpen);
+}
+if(siteMenuBtn)siteMenuBtn.onclick=e=>{e.stopPropagation();toggleSiteMenu()};
+if(siteNavBackdrop)siteNavBackdrop.onclick=closeSiteMenu;
+window.addEventListener('resize',()=>{
+  if(window.innerWidth>960&&siteNav&&siteNav.classList.contains('open'))closeSiteMenu();
+});
+
+function goSec(id,smooth){
+  if(typeof closeSiteMenu==='function')closeSiteMenu();
+  const e=SEC[id]||SEC.home,h=site.querySelector('.sh').offsetHeight;
+  site.style.scrollBehavior=smooth?'smooth':'auto';
+  site.scrollTop=id=='home'||!SEC[id]?0:e.getBoundingClientRect().top-site.getBoundingClientRect().top+site.scrollTop-h+1;
+  if(!smooth)setTimeout(()=>site.style.scrollBehavior='',0);
+}
 function spy(){const h=site.querySelector('.sh').offsetHeight+30;let cur='home';for(const k in SEC)if(SEC[k].getBoundingClientRect().top-site.getBoundingClientRect().top<=h)cur=k;if(site.scrollTop+site.clientHeight>=site.scrollHeight-4)cur='contact';site.querySelectorAll('.sn a').forEach(a=>a.classList.toggle('on',a.dataset.s==cur))}
 site.addEventListener('scroll',spy);
 site.querySelectorAll('.sn a').forEach(a=>a.onclick=()=>goSec(a.dataset.s,true));
 site.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>goSec(b.dataset.go,true));
-function openRoom(id){if(!ROOMS[id])id='home';room.classList.add('open');document.body.classList.add('open');nav.classList.remove('open');goSec(id,false);spy();site.focus({preventScroll:true})}
-function closeRoom(){room.classList.remove('open');document.body.classList.remove('open')}
+function openRoom(id){if(typeof closeSiteMenu==='function')closeSiteMenu();if(!ROOMS[id])id='home';room.classList.add('open');document.body.classList.add('open');nav.classList.remove('open');goSec(id,false);spy();site.focus({preventScroll:true})}
+function closeRoom(){if(typeof closeSiteMenu==='function')closeSiteMenu();room.classList.remove('open');document.body.classList.remove('open')}
 $('#back').onclick=closeRoom;room.addEventListener('click',e=>{if(e.target===room)closeRoom()});
 $('#menu').onclick=()=>nav.classList.toggle('open');
 document.querySelectorAll('.links button').forEach(b=>b.onclick=()=>openRoom(b.dataset.r));
@@ -2858,4 +3104,9 @@ if(m!==lastMin){lastMin=m;hh.textContent=String(Math.floor(h)).padStart(2,'0');m
 
 </script>
 
-</body></html>
+  <script type="module">
+    import { initProjects } from './js/projects.js';
+    initProjects();
+  </script>
+</body>
+</html>
