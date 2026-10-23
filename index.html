@@ -26,6 +26,7 @@
       <li><button data-r="mentors">Mentors</button></li>
       <li><button data-r="competitions">Competitions</button></li>
       <li><button data-r="partners">Partners</button></li>
+      <li><button data-r="faqs">FAQs</button></li>
       <li><button data-r="contact">Contact</button></li>
     </ul>
     <button id="menu" aria-label="Menu">☰</button>
@@ -51,6 +52,7 @@
           <a data-s="mentors">Mentors</a>
           <a data-s="competitions">Competitions</a>
           <a data-s="partners">Partners</a>
+          <a data-s="faqs">FAQs</a>
           <a data-s="contact">Contact</a>
         </nav>
         <div class="sh-actions">
@@ -281,6 +283,521 @@
 
 <section class="sec alt" id="s-partners" data-id="partners"><div class="in"><span class="eb">Partner startups</span><h2>Where top performers go next.</h2><p>A growing group of startups take our top performers as interns, on our recommendation.</p><div><span class="chip">Tech</span><span class="chip">Fintech</span><span class="chip">Marketing &amp; brand</span><span class="chip">Early-stage</span></div></div></section>
 
+      <section class="sec faq-sec" id="s-faqs" data-id="faqs">
+        <div class="in">
+          <div class="faq-header">
+            <div class="faq-hero-pill">
+              <span class="faq-pulse-dot" aria-hidden="true"></span>
+              <span>Got questions? We're here to help</span>
+            </div>
+            <h2>Frequently Asked Questions</h2>
+            <p>Everything you need to know about CoBit career workshops, mentors, student projects, competitions, and internship placement.</p>
+          </div>
+
+          <div class="faq-container">
+            <!-- Search Input -->
+            <div class="faq-search-wrapper">
+              <div class="faq-search-glass">
+                <span class="faq-search-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                </span>
+                <input type="search" id="faqSearchInput" class="faq-search-input" placeholder="Search questions (e.g. eligibility, mentors, coding, internships)..." aria-label="Search frequently asked questions" autocomplete="off">
+                <kbd class="faq-search-kbd" title="Press / to search">/</kbd>
+                <button type="button" id="faqSearchClear" class="faq-search-clear" aria-label="Clear search input">&times;</button>
+              </div>
+            </div>
+
+            <!-- Category Pills Bar with Icons and Counts -->
+            <div class="faq-pills-bar" id="faqFilters" role="tablist" aria-label="Filter FAQs by topic">
+              <button type="button" class="faq-pill on" data-category="all" role="tab" aria-selected="true" tabindex="0">
+                <span>All Topics</span>
+                <span class="faq-pill-count">14</span>
+              </button>
+              <button type="button" class="faq-pill" data-category="cobit" role="tab" aria-selected="false" tabindex="-1">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <span>CoBit</span>
+                <span class="faq-pill-count">2</span>
+              </button>
+              <button type="button" class="faq-pill" data-category="eligibility" role="tab" aria-selected="false" tabindex="-1">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                <span>Eligibility</span>
+                <span class="faq-pill-count">2</span>
+              </button>
+              <button type="button" class="faq-pill" data-category="workshops" role="tab" aria-selected="false" tabindex="-1">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                <span>Workshops</span>
+                <span class="faq-pill-count">2</span>
+              </button>
+              <button type="button" class="faq-pill" data-category="projects" role="tab" aria-selected="false" tabindex="-1">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                <span>Projects</span>
+                <span class="faq-pill-count">2</span>
+              </button>
+              <button type="button" class="faq-pill" data-category="competitions" role="tab" aria-selected="false" tabindex="-1">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.45 1-1 1H8v4h8v-4h-1c-.55 0-1-.45-1-1v-2.34"></path><path d="M18 4H6v7a6 6 0 0 0 12 0V4z"></path></svg>
+                <span>Competitions</span>
+                <span class="faq-pill-count">2</span>
+              </button>
+              <button type="button" class="faq-pill" data-category="mentors" role="tab" aria-selected="false" tabindex="-1">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                <span>Mentors</span>
+                <span class="faq-pill-count">2</span>
+              </button>
+              <button type="button" class="faq-pill" data-category="participation" role="tab" aria-selected="false" tabindex="-1">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+                <span>Participation</span>
+                <span class="faq-pill-count">2</span>
+              </button>
+            </div>
+
+            <!-- Meta status bar -->
+            <div class="faq-meta-bar">
+              <span id="faqCount" class="faq-count">Showing all 14 questions</span>
+              <div class="faq-meta-actions">
+                <button type="button" id="faqToggleAll" class="faq-util-btn" aria-expanded="false" aria-label="Expand all questions">
+                  <span class="toggle-icon" aria-hidden="true">+</span>
+                  <span class="toggle-text">Expand all</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Screen Reader Live Status Region -->
+            <div id="faqLiveStatus" class="sr-only" role="status" aria-live="polite"></div>
+
+            <!-- Accordion List -->
+            <div class="faq-list" id="faqList">
+
+              <!-- CoBit -->
+              <details class="faq-item" data-category="cobit" name="cobit-faq">
+                <summary class="faq-summary">
+                  <div class="faq-summary-left">
+                    <span class="faq-badge">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                      CoBit
+                    </span>
+                    <h3 class="faq-question">What is CoBit and what is its core mission?</h3>
+                  </div>
+                  <span class="faq-icon-wrap" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                  </span>
+                </summary>
+                <div class="faq-body-grid">
+                  <div class="faq-body-inner">
+                    <div class="faq-answer">
+                      <p>CoBit is an experiential career education accelerator built specifically for middle and high school students. Our core mission is to eliminate career guesswork before students take on college debt or commit to long degree pathways.</p>
+                      <p>We bring practical, modular tracks in software engineering, finance, marketing, product management, and startup building directly into school environments. By experiencing actual workflows and building genuine proof of work, students discover what they genuinely love doing through practice rather than assumption.</p>
+                    </div>
+                  </div>
+                </div>
+              </details>
+
+              <details class="faq-item" data-category="cobit" name="cobit-faq">
+                <summary class="faq-summary">
+                  <div class="faq-summary-left">
+                    <span class="faq-badge">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                      CoBit
+                    </span>
+                    <h3 class="faq-question">How does CoBit differ from typical school clubs or online coding bootcamps?</h3>
+                  </div>
+                  <span class="faq-icon-wrap" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                  </span>
+                </summary>
+                <div class="faq-body-grid">
+                  <div class="faq-body-inner">
+                    <div class="faq-answer">
+                      <p>Traditional academic coursework and school clubs typically focus on theoretical principles without direct industry immersion, while asynchronous online bootcamps suffer from low completion rates and isolated practice.</p>
+                      <p>CoBit bridges this gap through three pillars:</p>
+                      <ul>
+                        <li><strong>Working Mentors:</strong> Every session is taught by an active professional currently building in the field.</li>
+                        <li><strong>Production Tooling:</strong> Students use real industry instruments—Git version control, Figma, live cloud deployments, financial modeling templates, and venture pitch decks.</li>
+                        <li><strong>Direct Career Pathways:</strong> Programs culminate in judged hackathons with direct referrals and interview opportunities for paid summer internships at partner startups.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </details>
+
+              <!-- Eligibility -->
+              <details class="faq-item" data-category="eligibility" name="cobit-faq">
+                <summary class="faq-summary">
+                  <div class="faq-summary-left">
+                    <span class="faq-badge">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                      Eligibility
+                    </span>
+                    <h3 class="faq-question">Who is eligible to participate in CoBit programs?</h3>
+                  </div>
+                  <span class="faq-icon-wrap" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                  </span>
+                </summary>
+                <div class="faq-body-grid">
+                  <div class="faq-body-inner">
+                    <div class="faq-answer">
+                      <p>CoBit is open to middle and high school students (grades 8 through 12, ages 13–18), as well as early gap-year students seeking hands-on career direction before entering college.</p>
+                      <p>Whether you are completely new to technical fields or already have personal projects under your belt, our tracks provide scaffolded entry points that rapidly ramp up into advanced, collaborative team sprints.</p>
+                    </div>
+                  </div>
+                </div>
+              </details>
+
+              <details class="faq-item" data-category="eligibility" name="cobit-faq">
+                <summary class="faq-summary">
+                  <div class="faq-summary-left">
+                    <span class="faq-badge">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                      Eligibility
+                    </span>
+                    <h3 class="faq-question">Are there prerequisites, minimum grades, or hardware requirements?</h3>
+                  </div>
+                  <span class="faq-icon-wrap" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                  </span>
+                </summary>
+                <div class="faq-body-grid">
+                  <div class="faq-body-inner">
+                    <div class="faq-answer">
+                      <p><strong>Zero prior technical experience or minimum GPA required.</strong> We prioritize curiosity, dedication, and an eagerness to build with peers.</p>
+                      <p>For technical and financial tracks, students only need access to a standard computer or laptop (Windows, macOS, or Chromebook) with an internet browser. All software environments and cloud tools utilized in the curriculum are entirely free or supplied by CoBit.</p>
+                    </div>
+                  </div>
+                </div>
+              </details>
+
+              <!-- Workshops -->
+              <details class="faq-item" data-category="workshops" name="cobit-faq">
+                <summary class="faq-summary">
+                  <div class="faq-summary-left">
+                    <span class="faq-badge">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                      Workshops
+                    </span>
+                    <h3 class="faq-question">What career workshop tracks are offered?</h3>
+                  </div>
+                  <span class="faq-icon-wrap" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                  </span>
+                </summary>
+                <div class="faq-body-grid">
+                  <div class="faq-body-inner">
+                    <div class="faq-answer">
+                      <p>We offer five specialized, interactive career workshop tracks:</p>
+                      <ul>
+                        <li><strong>Tech &amp; Software Engineering:</strong> Build full-stack web applications, write backend logic, connect databases, and learn Git version control and modern deployment.</li>
+                        <li><strong>Finance &amp; Markets:</strong> Master corporate budgets, valuation modeling, DCF calculations, and understand stock and market economics with real datasets.</li>
+                        <li><strong>Marketing &amp; Brand Strategy:</strong> Design comprehensive go-to-market strategies, conversion funnels, copywriting, brand identity, and acquisition analytics.</li>
+                        <li><strong>Product &amp; Team Management:</strong> Run agile sprint cycles, write functional product specifications, lead multidisciplinary teams, and ship on time.</li>
+                        <li><strong>Innovation &amp; Startups:</strong> Transform an initial idea into an investor-ready pitch, conduct customer validation interviews, build MVPs, and model unit economics.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </details>
+
+              <details class="faq-item" data-category="workshops" name="cobit-faq">
+                <summary class="faq-summary">
+                  <div class="faq-summary-left">
+                    <span class="faq-badge">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                      Workshops
+                    </span>
+                    <h3 class="faq-question">How are workshop sessions scheduled and conducted?</h3>
+                  </div>
+                  <span class="faq-icon-wrap" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                  </span>
+                </summary>
+                <div class="faq-body-grid">
+                  <div class="faq-body-inner">
+                    <div class="faq-answer">
+                      <p>Workshops run in 4- to 8-week cohorts structured to fit seamlessly into the academic calendar. Sessions are held after school or on weekends so they never conflict with regular class commitments.</p>
+                      <p>Each session is 90 minutes long and emphasizes hands-on execution: 25 minutes of mentor-led industry frameworks followed by 65 minutes of collaborative lab sprints where students write code, formulate models, or design prototypes under live mentor supervision.</p>
+                    </div>
+                  </div>
+                </div>
+              </details>
+
+              <!-- Projects -->
+              <details class="faq-item" data-category="projects" name="cobit-faq">
+                <summary class="faq-summary">
+                  <div class="faq-summary-left">
+                    <span class="faq-badge">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                      Projects
+                    </span>
+                    <h3 class="faq-question">What kind of projects do students build during the program?</h3>
+                  </div>
+                  <span class="faq-icon-wrap" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                  </span>
+                </summary>
+                <div class="faq-body-grid">
+                  <div class="faq-body-inner">
+                    <div class="faq-answer">
+                      <p>Students build production-grade, portfolio-worthy assets rather than boilerplate homework exercises. Examples include:</p>
+                      <ul>
+                        <li>Interactive web applications, utilities, and developer tools with public URLs and GitHub repositories.</li>
+                        <li>Financial valuation models and dynamic budgeting calculators using real company filings.</li>
+                        <li>Brand launch kits, ad campaigns, and landing page designs with tracked conversion experiments.</li>
+                        <li>Validated venture pitch decks and functional prototypes tested with real target users.</li>
+                      </ul>
+                      <p>All projects are featured in the CoBit public showcase and can be embedded directly into students' resumes and college applications.</p>
+                    </div>
+                  </div>
+                </div>
+              </details>
+
+              <details class="faq-item" data-category="projects" name="cobit-faq">
+                <summary class="faq-summary">
+                  <div class="faq-summary-left">
+                    <span class="faq-badge">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                      Projects
+                    </span>
+                    <h3 class="faq-question">Do students work independently or in teams?</h3>
+                  </div>
+                  <span class="faq-icon-wrap" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                  </span>
+                </summary>
+                <div class="faq-body-grid">
+                  <div class="faq-body-inner">
+                    <div class="faq-answer">
+                      <p>Both models are incorporated for optimal skill acquisition. Individual milestones ensure that every participant achieves hands-on mastery of fundamental tools and concepts.</p>
+                      <p>For the capstone project and showcase competition, students assemble into multidisciplinary teams. This mirrors real tech and startup companies, where engineers, product thinkers, and marketers collaborate to ship a complete product together.</p>
+                    </div>
+                  </div>
+                </div>
+              </details>
+
+              <!-- Competitions -->
+              <details class="faq-item" data-category="competitions" name="cobit-faq">
+                <summary class="faq-summary">
+                  <div class="faq-summary-left">
+                    <span class="faq-badge">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.45 1-1 1H8v4h8v-4h-1c-.55 0-1-.45-1-1v-2.34"></path><path d="M18 4H6v7a6 6 0 0 0 12 0V4z"></path></svg>
+                      Competitions
+                    </span>
+                    <h3 class="faq-question">How do CoBit capstone competitions and demo days work?</h3>
+                  </div>
+                  <span class="faq-icon-wrap" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                  </span>
+                </summary>
+                <div class="faq-body-grid">
+                  <div class="faq-body-inner">
+                    <div class="faq-answer">
+                      <p>Each workshop cohort culminates in a showcase competition modelled after a high-stakes startup demo day or hackathon.</p>
+                      <p>Student teams pitch their projects, demonstrate live working software or financial analyses, and answer questions from an independent panel of judges—including startup founders, senior engineers, and investment professionals. Every team receives detailed critique and tactical feedback.</p>
+                    </div>
+                  </div>
+                </div>
+              </details>
+
+              <details class="faq-item" data-category="competitions" name="cobit-faq">
+                <summary class="faq-summary">
+                  <div class="faq-summary-left">
+                    <span class="faq-badge">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.45 1-1 1H8v4h8v-4h-1c-.55 0-1-.45-1-1v-2.34"></path><path d="M18 4H6v7a6 6 0 0 0 12 0V4z"></path></svg>
+                      Competitions
+                    </span>
+                    <h3 class="faq-question">What awards and career opportunities can students win?</h3>
+                  </div>
+                  <span class="faq-icon-wrap" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                  </span>
+                </summary>
+                <div class="faq-body-grid">
+                  <div class="faq-body-inner">
+                    <div class="faq-answer">
+                      <p>In addition to cohort trophies and verified certificates of achievement, the highest-performing teams and standout individuals earn <strong>exclusive internship recommendations</strong>.</p>
+                      <p>We directly connect top performers with our network of 40+ partner startups across tech, fintech, and digital media for paid summer internships—providing a real, high-impact resume line years ahead of college graduation.</p>
+                    </div>
+                  </div>
+                </div>
+              </details>
+
+              <!-- Mentors -->
+              <details class="faq-item" data-category="mentors" name="cobit-faq">
+                <summary class="faq-summary">
+                  <div class="faq-summary-left">
+                    <span class="faq-badge">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                      Mentors
+                    </span>
+                    <h3 class="faq-question">Who are the mentors and how are they selected?</h3>
+                  </div>
+                  <span class="faq-icon-wrap" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                  </span>
+                </summary>
+                <div class="faq-body-grid">
+                  <div class="faq-body-inner">
+                    <div class="faq-answer">
+                      <p>CoBit mentors are active, practicing professionals: software engineers, product managers, startup founders, venture capitalists, and financial analysts who do these jobs day in and day out.</p>
+                      <p>Every mentor undergoes an in-depth vetting process to assess both their industry credentials and their ability to communicate complex concepts with patience, enthusiasm, and empathy for young learners.</p>
+                    </div>
+                  </div>
+                </div>
+              </details>
+
+              <details class="faq-item" data-category="mentors" name="cobit-faq">
+                <summary class="faq-summary">
+                  <div class="faq-summary-left">
+                    <span class="faq-badge">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                      Mentors
+                    </span>
+                    <h3 class="faq-question">How do mentors support students outside regular sessions?</h3>
+                  </div>
+                  <span class="faq-icon-wrap" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                  </span>
+                </summary>
+                <div class="faq-body-grid">
+                  <div class="faq-body-inner">
+                    <div class="faq-answer">
+                      <p>Mentorship extends beyond the classroom podium. Mentors offer:</p>
+                      <ul>
+                        <li><strong>Weekly Office Hours:</strong> Dedicated 1-on-1 and small group breakout sessions to debug blockers and review project code or decks.</li>
+                        <li><strong>Career AMAs:</strong> Candid discussions about tech culture, salary trajectories, college majors vs. real work skills, and life decisions.</li>
+                        <li><strong>Direct Feedback:</strong> In-line code reviews and pitch practice sessions before competition day.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </details>
+
+              <!-- Participation -->
+              <details class="faq-item" data-category="participation" name="cobit-faq">
+                <summary class="faq-summary">
+                  <div class="faq-summary-left">
+                    <span class="faq-badge">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+                      Participation
+                    </span>
+                    <h3 class="faq-question">How can an individual student enroll or register?</h3>
+                  </div>
+                  <span class="faq-icon-wrap" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                  </span>
+                </summary>
+                <div class="faq-body-grid">
+                  <div class="faq-body-inner">
+                    <div class="faq-answer">
+                      <p>Individual students can register for upcoming cohorts by navigating to our <a data-go="contact" href="#s-contact">Contact section</a> or emailing us directly at <a href="mailto:cobit.labs@gmail.com">cobit.labs@gmail.com</a>.</p>
+                      <p>Our student operations team will share cohort schedules, track syllabi, and orientation packets. Since cohort sizes are capped to maintain our low mentor-to-student ratio, prompt registration is recommended.</p>
+                    </div>
+                  </div>
+                </div>
+              </details>
+
+              <details class="faq-item" data-category="participation" name="cobit-faq">
+                <summary class="faq-summary">
+                  <div class="faq-summary-left">
+                    <span class="faq-badge">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+                      Participation
+                    </span>
+                    <h3 class="faq-question">How can schools partner with CoBit to host workshops?</h3>
+                  </div>
+                  <span class="faq-icon-wrap" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                  </span>
+                </summary>
+                <div class="faq-body-grid">
+                  <div class="faq-body-inner">
+                    <div class="faq-answer">
+                      <p>School administrators, STEM coordinators, and guidance counselors can bring CoBit workshops directly to their campuses as an integrated extracurricular or co-curricular track.</p>
+                      <p>CoBit handles mentor staffing, curriculum pacing, software tooling, and competition logistics—creating zero operational strain for school faculty. Reach out through our contact form to schedule an institutional briefing.</p>
+                    </div>
+                  </div>
+                </div>
+              </details>
+
+            </div>
+
+            <!-- Empty Search State -->
+            <div id="faqEmpty" class="faq-empty" hidden>
+              <div class="faq-empty-icon" aria-hidden="true">🔍</div>
+              <h3>No matching questions found</h3>
+              <p>We couldn't find any questions matching your search. Try different terms or view all topics.</p>
+              <button type="button" class="faq-pill on" id="faqClearSearch">Show all questions</button>
+            </div>
+
+            <!-- Modern Support Callout Card -->
+            <div class="faq-support-card">
+              <div class="faq-support-glow" aria-hidden="true"></div>
+              <div class="faq-support-inner">
+                <div class="faq-support-info">
+                  <div class="faq-support-avatar" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 class="faq-support-title">Still have unanswered questions?</h4>
+                    <p class="faq-support-desc">Can't find what you're looking for? Reach out directly to our mentor team or inquire about hosting CoBit at your school.</p>
+                  </div>
+                </div>
+                <div class="faq-support-actions">
+                  <a href="mailto:cobit.labs@gmail.com" class="bt">Email Our Team</a>
+                  <button type="button" class="bt o" data-go="contact">Contact Details</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
 <footer class="ft" id="s-contact" data-id="contact"><h3>Find us</h3>
 <div class="so">
 <a class="ig" href="https://www.instagram.com/cobit_labs/" target="_blank" rel="noopener" aria-label="CoBit on Instagram" title="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.25" fill="currentColor"/></svg></a>
@@ -335,6 +852,7 @@ workshops:['Workshops','<p>Five hands-on tracks, run in-school.</p><div class="g
 mentors:['Mentors','<p>Every workshop is led by a mentor working in that field right now. Students ask what they cannot ask in a classroom, and hear from someone building a career in it.</p>'],
 competitions:['Competitions & Internships','<p>Each workshop series closes with a competition. Mentors judge, and the strongest performers are recommended for internships at our partner startups, a first resume line years before college.</p>'],
 partners:['Partner Startups','<p>A growing group of startups take our top performers as interns, on our recommendation.</p><span class="chip">Tech</span><span class="chip">Fintech</span><span class="chip">Marketing &amp; brand</span><span class="chip">Early-stage</span>'],
+faqs:['FAQs','<p>Frequently asked questions about CoBit programs, eligibility, workshops, projects, competitions, mentors, and participation.</p>'],
 contact:['Bring CoBit to your school','<p>Principals, mentors and startups, reach out.</p><p><a href="mailto:hello@cobit.example">hello@cobit.example</a></p>']};
 
 /* renderer / scene */
@@ -2822,7 +3340,7 @@ document.querySelectorAll('.pad button').forEach(b=>{const d=b.dataset.d;b.addEv
 
 /* rooms + nav */
 const room=$('#room'),nav=$('#nav'),site=$('#site'),SEC={};site.querySelectorAll('.sec,.ft').forEach(e=>SEC[e.dataset.id]=e);
-ROOMS.home=['CoBit'];ROOMS.how=['How it works'];ROOMS.team=['Our Team'];ROOMS.projects=['Our Projects'];
+ROOMS.home=['CoBit'];ROOMS.how=['How it works'];ROOMS.team=['Our Team'];ROOMS.projects=['Our Projects'];ROOMS.faqs=['Frequently Asked Questions'];
 
 const siteNav=$('#siteNav'),siteMenuBtn=$('#siteMenuBtn'),siteNavBackdrop=$('#siteNavBackdrop');
 function closeSiteMenu(){
@@ -3106,7 +3624,9 @@ if(m!==lastMin){lastMin=m;hh.textContent=String(Math.floor(h)).padStart(2,'0');m
 
   <script type="module">
     import { initProjects } from './js/projects.js';
+    import { initFaqs } from './js/faqs.js';
     initProjects();
+    initFaqs();
   </script>
 </body>
 </html>
