@@ -14,6 +14,7 @@ import { camUpd, initCameraControls } from './ui/camera.js';
 import { initClock } from './ui/clock.js';
 import { initModal } from './ui/modal.js';
 import { initProjects } from './projects.js';
+import { initOpportunities } from './opportunities.js';
 
 function init() {
   window.addEventListener('resize', resize);
@@ -50,6 +51,7 @@ function init() {
   initCameraControls(handlePick);
   const updateClock = initClock();
   initProjects();
+  initOpportunities();
 
   // Main coordinated animation loop
   let last = performance.now();

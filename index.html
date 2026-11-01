@@ -23,6 +23,7 @@
       <li><button data-r="team">Team</button></li>
       <li><button data-r="workshops">Workshops</button></li>
       <li><button data-r="projects">Projects</button></li>
+      <li><button data-r="opportunities">Opportunities</button></li>
       <li><button data-r="mentors">Mentors</button></li>
       <li><button data-r="competitions">Competitions</button></li>
       <li><button data-r="partners">Partners</button></li>
@@ -49,6 +50,7 @@
           <a data-s="workshops">Workshops</a>
           <a data-s="projects">Projects</a>
           <a data-s="how">How it works</a>
+          <a data-s="opportunities">Opportunities</a>
           <a data-s="mentors">Mentors</a>
           <a data-s="competitions">Competitions</a>
           <a data-s="partners">Partners</a>
@@ -348,6 +350,21 @@
 
 <section class="sec" id="s-how" data-id="how"><div class="in"><span class="eb">How it works</span><h2>Learn by doing: from concept to real project.</h2>
 <div class="steps"><div class="cd"><span class="n">1</span><h3>Explore &amp; Register</h3><p>Review event details and eligibility, then complete registration.</p></div><div class="cd"><span class="n">2</span><h3>Demonstration</h3><p>Mentors introduce concepts from the ground up with guided walkthroughs.</p></div><div class="cd"><span class="n">3</span><h3>Hands-on Building</h3><p>Engage in guided activities, experimentation, and practical implementation.</p></div><div class="cd"><span class="n">4</span><h3>Project &amp; Certificate</h3><p>Build meaningful projects, compete in hackathons, and earn certificates.</p></div></div></div></section>
+
+      <!-- 6th Section – Opportunities -->
+      <section class="sec" id="s-opportunities" data-id="opportunities">
+        <div class="in">
+          <div class="opportunities-header">
+            <span class="eb">Opportunities</span>
+            <h2>Open roles, fellowships, and internships.</h2>
+            <p>Explore hands-on student opportunities to build emerging technology, robotics, and startup projects alongside experienced mentors.</p>
+          </div>
+
+          <div id="opportunitiesContainer" class="opportunities-container" aria-live="polite">
+            <!-- Dynamically populated from backend service -->
+          </div>
+        </div>
+      </section>
 
 <section class="sec dark" id="s-mentors" data-id="mentors"><div class="in"><span class="eb">Experienced Mentors</span><h2>Conducted by experienced mentors and practitioners.</h2><p>Workshops are conducted by programme mentors and team members with relevant experience. With a learn-by-doing approach, we combine explanations and demonstrations with guided activities to help students build real skills.</p></div></section>
 
@@ -949,6 +966,7 @@ workshops:['Workshops & Events','<p>CoBit organises technology workshops, roboti
 mentors:['Mentors','<p>Workshops are conducted by programme mentors and team members with relevant experience, focusing on learning by doing.</p>'],
 competitions:['Competitions & Hackathons','<p>Competitions and hackathons where students test their skills, build meaningful projects, and earn certificates.</p>'],
 partners:['Collaborations & Partners','<p>Schools, colleges, student communities, and organisations can reach out to explore workshops, events, technology programmes, and sponsorships.</p>'],
+opportunities:['Opportunities','<p>Explore open student roles, fellowships, and internships with CoBit.</p>'],
 faqs:['FAQs','<p>Clear answers about CoBit, our programmes, workshops, eligibility, projects, mentors, registrations, and collaborations.</p>'],
 contact:['Contact CoBit','<p>Reach out to explore workshops, event registrations, school or college collaborations, sponsorships, or joining the CoBit team.<br><br>cobit.labs@gmail.com</p>']};
 
@@ -3437,7 +3455,7 @@ document.querySelectorAll('.pad button').forEach(b=>{const d=b.dataset.d;b.addEv
 
 /* rooms + nav */
 const room=$('#room'),nav=$('#nav'),site=$('#site'),SEC={};site.querySelectorAll('.sec,.ft').forEach(e=>SEC[e.dataset.id]=e);
-ROOMS.home=['CoBit'];ROOMS.how=['How it works'];ROOMS.team=['Our Team'];ROOMS.projects=['Our Projects'];ROOMS.faqs=['Frequently Asked Questions'];
+ROOMS.home=['CoBit'];ROOMS.how=['How it works'];ROOMS.team=['Our Team'];ROOMS.projects=['Our Projects'];ROOMS.opportunities=['Opportunities'];ROOMS.faqs=['Frequently Asked Questions'];
 
 const siteNav=$('#siteNav'),siteMenuBtn=$('#siteMenuBtn'),siteNavBackdrop=$('#siteNavBackdrop');
 function closeSiteMenu(){
@@ -3721,8 +3739,10 @@ if(m!==lastMin){lastMin=m;hh.textContent=String(Math.floor(h)).padStart(2,'0');m
 
   <script type="module">
     import { initProjects } from './js/projects.js';
+    import { initOpportunities } from './js/opportunities.js';
     import { initFaqs } from './js/faqs.js';
     initProjects();
+    initOpportunities();
     initFaqs();
   </script>
 </body>

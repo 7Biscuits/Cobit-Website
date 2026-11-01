@@ -24,6 +24,7 @@ export function initModal() {
   ROOMS.how = ['How it works'];
   ROOMS.team = ['Our Team'];
   ROOMS.projects = ['Our Projects'];
+  ROOMS.opportunities = ['Opportunities'];
 
   function roomAt(e) {
     if (!cv) return null;

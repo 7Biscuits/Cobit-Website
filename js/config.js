@@ -31,6 +31,10 @@ export const ROOMS = {
     'Our Projects',
     '<p>Real-world applications and venture prototypes built by CoBit students in mentor-led workshops.</p>'
   ],
+  opportunities: [
+    'Opportunities',
+    '<p>Explore open student roles, internships, and opportunities to build with CoBit.</p>'
+  ],
   home: ['CoBit'],
   how: ['How it works']
 };

@@ -10,6 +10,10 @@ import {
   updateProject,
   deleteProject,
   uploadProjectMedia,
+  getAllOpportunities,
+  createOpportunity,
+  updateOpportunity,
+  deleteOpportunity,
   getAdminProfile,
   getAllAdminProfiles,
   verifyAdminAccount,
@@ -24,12 +28,16 @@ import {
 let currentUser = null;
 let currentAdminProfile = null;
 let allProjects = [];
+let allOpportunities = [];
 let allAdminProfiles = [];
 let editingProjectId = null;
+let editingOppId = null;
 let coverImageUrl = '';
 let screenshotUrls = [];
 let pendingDeleteId = null;
+let pendingDeleteOppId = null;
 let isSignUpMode = false;
+let activeTab = 'projects';
 
 // DOM Elements - Auth & Sections
 const authSection = document.getElementById('authSection');
@@ -57,7 +65,15 @@ const authError = document.getElementById('authError');
 const tabSignIn = document.getElementById('tabSignIn');
 const tabSignUp = document.getElementById('tabSignUp');
 
-// Dashboard controls
+// Dashboard Navigation Tabs
+const tabProjectsBtn = document.getElementById('tabProjectsBtn');
+const tabOpportunitiesBtn = document.getElementById('tabOpportunitiesBtn');
+const tabBadgeProjects = document.getElementById('tabBadgeProjects');
+const tabBadgeOpportunities = document.getElementById('tabBadgeOpportunities');
+const projectsView = document.getElementById('projectsView');
+const opportunitiesView = document.getElementById('opportunitiesView');
+
+// Projects controls
 const totalCountEl = document.getElementById('totalCount');
 const pubCountEl = document.getElementById('pubCount');
 const draftCountEl = document.getElementById('draftCount');
@@ -68,7 +84,17 @@ const btnNewProject = document.getElementById('btnNewProject');
 const projectsTableBody = document.getElementById('projectsTableBody');
 const emptyStateEl = document.getElementById('emptyState');
 
-// Modals
+// Opportunities controls
+const totalOppCountEl = document.getElementById('totalOppCount');
+const pubOppCountEl = document.getElementById('pubOppCount');
+const draftOppCountEl = document.getElementById('draftOppCount');
+const searchOppInput = document.getElementById('searchOppInput');
+const filterOppStatus = document.getElementById('filterOppStatus');
+const btnNewOpportunity = document.getElementById('btnNewOpportunity');
+const opportunitiesTableBody = document.getElementById('opportunitiesTableBody');
+const oppEmptyStateEl = document.getElementById('oppEmptyState');
+
+// Modals - Projects
 const projectEditorModal = document.getElementById('projectEditorModal');
 const projectForm = document.getElementById('projectForm');
 const modalTitle = document.getElementById('modalTitle');
@@ -78,6 +104,23 @@ const deleteConfirmModal = document.getElementById('deleteConfirmModal');
 const btnConfirmDelete = document.getElementById('btnConfirmDelete');
 const btnCancelDelete = document.getElementById('btnCancelDelete');
 const deleteProjectTitleEl = document.getElementById('deleteProjectTitle');
+
+// Modals - Opportunities
+const opportunityEditorModal = document.getElementById('opportunityEditorModal');
+const oppModalTitle = document.getElementById('oppModalTitle');
+const opportunityForm = document.getElementById('opportunityForm');
+const oppTitleInput = document.getElementById('oppTitleInput');
+const oppPublishedInput = document.getElementById('oppPublishedInput');
+const oppDescInput = document.getElementById('oppDescInput');
+const oppEligibilityInput = document.getElementById('oppEligibilityInput');
+const oppRequirementsInput = document.getElementById('oppRequirementsInput');
+const oppAppLinkInput = document.getElementById('oppAppLinkInput');
+const btnSaveOpportunity = document.getElementById('btnSaveOpportunity');
+const btnCancelOppEditor = document.getElementById('btnCancelOppEditor');
+const deleteOppConfirmModal = document.getElementById('deleteOppConfirmModal');
+const deleteOppTitleEl = document.getElementById('deleteOppTitleEl');
+const btnConfirmDeleteOpp = document.getElementById('btnConfirmDeleteOpp');
+const btnCancelDeleteOpp = document.getElementById('btnCancelDeleteOpp');
 
 // Account Settings Modal
 const accountSettingsModal = document.getElementById('accountSettingsModal');
@@ -154,6 +197,7 @@ async function handleAuthState(user) {
     userEmailEl.textContent = '';
     btnManageAdmins.style.display = 'none';
     allProjects = [];
+    allOpportunities = [];
     return;
   }
 
@@ -222,7 +266,10 @@ async function handleAuthState(user) {
       btnManageAdmins.style.display = 'none';
     }
 
-    await loadDashboardProjects();
+    await Promise.all([
+      loadDashboardProjects(),
+      loadDashboardOpportunities()
+    ]);
   } catch (err) {
     console.error('Error verifying admin authorization:', err);
     showToast('Failed to verify authorization: ' + err.message, 'error');
@@ -329,23 +376,58 @@ function setupEventListeners() {
     btnManageAdmins.addEventListener('click', openAdminsModal);
   }
 
-  // Filter & Search
+  // Tab Switching (Projects vs Opportunities)
+  if (tabProjectsBtn) {
+    tabProjectsBtn.addEventListener('click', () => switchDashboardTab('projects'));
+  }
+  if (tabOpportunitiesBtn) {
+    tabOpportunitiesBtn.addEventListener('click', () => switchDashboardTab('opportunities'));
+  }
+
+  // Filter & Search - Projects
   searchInput.addEventListener('input', renderProjectsTable);
   filterCategory.addEventListener('change', renderProjectsTable);
   filterStatus.addEventListener('change', renderProjectsTable);
 
+  // Filter & Search - Opportunities
+  if (searchOppInput) searchOppInput.addEventListener('input', renderOpportunitiesTable);
+  if (filterOppStatus) filterOppStatus.addEventListener('change', renderOpportunitiesTable);
+
   // New Project Button
   btnNewProject.addEventListener('click', () => openProjectEditor(null));
 
-  // Editor Modal Cancel & Delete Cancel
+  // New Opportunity Button
+  if (btnNewOpportunity) {
+    btnNewOpportunity.addEventListener('click', () => openOpportunityEditor(null));
+  }
+
+  // Editor Modal Cancel & Delete Cancel - Projects
   btnCancelEditor.addEventListener('click', () => projectEditorModal.close());
   btnCancelDelete.addEventListener('click', () => deleteConfirmModal.close());
+
+  // Editor Modal Cancel & Delete Cancel - Opportunities
+  if (btnCancelOppEditor) {
+    btnCancelOppEditor.addEventListener('click', () => opportunityEditorModal.close());
+  }
+  if (btnCancelDeleteOpp) {
+    btnCancelDeleteOpp.addEventListener('click', () => deleteOppConfirmModal.close());
+  }
 
   // Save Project Form
   projectForm.addEventListener('submit', handleProjectSave);
 
-  // Confirm Delete
+  // Save Opportunity Form
+  if (opportunityForm) {
+    opportunityForm.addEventListener('submit', handleOpportunitySave);
+  }
+
+  // Confirm Delete - Projects
   btnConfirmDelete.addEventListener('click', handleProjectDelete);
+
+  // Confirm Delete - Opportunities
+  if (btnConfirmDeleteOpp) {
+    btnConfirmDeleteOpp.addEventListener('click', handleOpportunityDelete);
+  }
 
   // File Upload Handlers (Supabase Storage)
   coverFileInput.addEventListener('change', handleCoverUpload);
@@ -356,6 +438,26 @@ function setupEventListeners() {
 
   screenshotsFileInput.addEventListener('change', handleScreenshotsUpload);
   screenshotsUrlInput.addEventListener('change', handleScreenshotsUrlPaste);
+}
+
+// Tab Switching
+function switchDashboardTab(tab) {
+  activeTab = tab;
+  if (tab === 'opportunities') {
+    tabOpportunitiesBtn?.classList.add('active');
+    tabOpportunitiesBtn?.setAttribute('aria-selected', 'true');
+    tabProjectsBtn?.classList.remove('active');
+    tabProjectsBtn?.setAttribute('aria-selected', 'false');
+    if (projectsView) projectsView.style.display = 'none';
+    if (opportunitiesView) opportunitiesView.style.display = 'block';
+  } else {
+    tabProjectsBtn?.classList.add('active');
+    tabProjectsBtn?.setAttribute('aria-selected', 'true');
+    tabOpportunitiesBtn?.classList.remove('active');
+    tabOpportunitiesBtn?.setAttribute('aria-selected', 'false');
+    if (opportunitiesView) opportunitiesView.style.display = 'none';
+    if (projectsView) projectsView.style.display = 'block';
+  }
 }
 
 async function signOutAdmin() {
@@ -370,7 +472,14 @@ async function signOutAdmin() {
 
 // Dialog light dismiss setup
 function setupDialogs() {
-  [projectEditorModal, deleteConfirmModal, accountSettingsModal, adminsModal].forEach(dialog => {
+  [
+    projectEditorModal,
+    deleteConfirmModal,
+    accountSettingsModal,
+    adminsModal,
+    opportunityEditorModal,
+    deleteOppConfirmModal
+  ].forEach(dialog => {
     if (!dialog) return;
 
     if (!('closedBy' in HTMLDialogElement.prototype)) {
@@ -672,6 +781,7 @@ function updateStats() {
   totalCountEl.textContent = total;
   pubCountEl.textContent = published;
   draftCountEl.textContent = drafts;
+  if (tabBadgeProjects) tabBadgeProjects.textContent = total;
 }
 
 function renderProjectsTable() {
@@ -971,6 +1081,251 @@ async function handleProjectDelete() {
     btnConfirmDelete.disabled = false;
     btnConfirmDelete.textContent = 'Delete Project';
     pendingDeleteId = null;
+  }
+}
+
+// ==========================================
+// OPPORTUNITIES MANAGEMENT & CRUD
+// ==========================================
+
+async function loadDashboardOpportunities() {
+  if (!opportunitiesTableBody) return;
+  try {
+    opportunitiesTableBody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--text-muted);">Loading opportunities...</td></tr>`;
+    allOpportunities = await getAllOpportunities();
+    updateOpportunityStats();
+    renderOpportunitiesTable();
+  } catch (err) {
+    console.error('Failed to load opportunities:', err);
+    showToast('Failed to load opportunities: ' + err.message, 'error');
+    opportunitiesTableBody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--danger);">Error loading opportunities from database.</td></tr>`;
+  }
+}
+
+function updateOpportunityStats() {
+  const total = allOpportunities.length;
+  const published = allOpportunities.filter(o => o.is_published).length;
+  const drafts = total - published;
+
+  if (totalOppCountEl) totalOppCountEl.textContent = total;
+  if (pubOppCountEl) pubOppCountEl.textContent = published;
+  if (draftOppCountEl) draftOppCountEl.textContent = drafts;
+  if (tabBadgeOpportunities) tabBadgeOpportunities.textContent = total;
+}
+
+function renderOpportunitiesTable() {
+  if (!opportunitiesTableBody) return;
+
+  const query = searchOppInput ? searchOppInput.value.trim().toLowerCase() : '';
+  const statusFilter = filterOppStatus ? filterOppStatus.value : 'all';
+
+  const filtered = allOpportunities.filter(opp => {
+    const matchesQuery = !query ||
+      (opp.title && opp.title.toLowerCase().includes(query)) ||
+      (opp.description && opp.description.toLowerCase().includes(query)) ||
+      (opp.eligibility && opp.eligibility.toLowerCase().includes(query)) ||
+      (opp.requirements && opp.requirements.toLowerCase().includes(query));
+
+    const matchesStatus = statusFilter === 'all' ||
+      (statusFilter === 'published' && opp.is_published) ||
+      (statusFilter === 'draft' && !opp.is_published);
+
+    return matchesQuery && matchesStatus;
+  });
+
+  if (filtered.length === 0) {
+    opportunitiesTableBody.innerHTML = '';
+    if (oppEmptyStateEl) oppEmptyStateEl.style.display = 'block';
+    return;
+  }
+
+  if (oppEmptyStateEl) oppEmptyStateEl.style.display = 'none';
+
+  opportunitiesTableBody.innerHTML = filtered.map(opp => {
+    const isPub = !!opp.is_published;
+    const descExcerpt = (opp.description || '').length > 100
+      ? escapeHTML(opp.description.slice(0, 97)) + '...'
+      : escapeHTML(opp.description || '');
+
+    return `
+      <tr data-opp-id="${opp.id}">
+        <td>
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <strong style="color: #fff; font-size: 0.95rem;">${escapeHTML(opp.title)}</strong>
+            <span class="cell-subtext">${descExcerpt}</span>
+            ${opp.application_link ? `
+              <div style="margin-top: 4px;">
+                <a href="${escapeHTML(opp.application_link)}" target="_blank" rel="noopener" style="font-size: 0.78rem; color: var(--accent); text-decoration: none;">
+                  Application Link ↗
+                </a>
+              </div>
+            ` : ''}
+          </div>
+        </td>
+        <td>
+          <div style="display: flex; flex-direction: column; gap: 4px; font-size: 0.82rem;">
+            ${opp.eligibility ? `<div class="opp-cell-pill" title="${escapeHTML(opp.eligibility)}"><strong>Eligibility:</strong> ${escapeHTML(opp.eligibility)}</div>` : '<span style="color: var(--text-muted); font-size: 0.8rem;">Open to all</span>'}
+            ${opp.requirements ? `<div class="opp-cell-pill" title="${escapeHTML(opp.requirements)}"><strong>Reqs:</strong> ${escapeHTML(opp.requirements)}</div>` : ''}
+          </div>
+        </td>
+        <td>
+          <button class="status-toggle-btn" data-opp-id="${opp.id}" data-action="toggle-opp-pub" title="Click to toggle publication status">
+            <span class="status-pill ${isPub ? 'published' : 'draft'}">
+              ${isPub ? '● Published' : '○ Draft'}
+            </span>
+          </button>
+        </td>
+        <td>
+          <span style="font-size: 0.82rem; color: var(--text-muted);">${formatDate(opp.created_at)}</span>
+        </td>
+        <td>
+          <div class="table-actions">
+            <button class="btn btn-secondary btn-sm" data-opp-id="${opp.id}" data-action="edit-opp">Edit</button>
+            <button class="btn btn-danger btn-sm" data-opp-id="${opp.id}" data-action="delete-opp">Delete</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+
+  // Wire action buttons
+  opportunitiesTableBody.querySelectorAll('[data-action]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.oppId;
+      const action = btn.dataset.action;
+      const opp = allOpportunities.find(o => o.id === id);
+      if (!opp) return;
+
+      if (action === 'edit-opp') {
+        openOpportunityEditor(opp);
+      } else if (action === 'delete-opp') {
+        promptDeleteOpportunity(opp);
+      } else if (action === 'toggle-opp-pub') {
+        toggleOpportunityPublish(opp.id, opp.is_published);
+      }
+    });
+  });
+}
+
+function openOpportunityEditor(opp = null) {
+  if (!opportunityEditorModal) return;
+
+  editingOppId = opp ? opp.id : null;
+
+  if (opp) {
+    if (oppModalTitle) oppModalTitle.textContent = 'Edit Opportunity';
+    if (btnSaveOpportunity) btnSaveOpportunity.textContent = 'Update Opportunity';
+    if (oppTitleInput) oppTitleInput.value = opp.title || '';
+    if (oppPublishedInput) oppPublishedInput.checked = !!opp.is_published;
+    if (oppDescInput) oppDescInput.value = opp.description || '';
+    if (oppEligibilityInput) oppEligibilityInput.value = opp.eligibility || '';
+    if (oppRequirementsInput) oppRequirementsInput.value = opp.requirements || '';
+    if (oppAppLinkInput) oppAppLinkInput.value = opp.application_link || '';
+  } else {
+    if (oppModalTitle) oppModalTitle.textContent = 'Add New Opportunity';
+    if (btnSaveOpportunity) btnSaveOpportunity.textContent = 'Save Opportunity';
+    if (opportunityForm) opportunityForm.reset();
+    if (oppPublishedInput) oppPublishedInput.checked = true;
+  }
+
+  opportunityEditorModal.showModal();
+}
+
+async function handleOpportunitySave(e) {
+  e.preventDefault();
+
+  const title = oppTitleInput ? oppTitleInput.value.trim() : '';
+  const description = oppDescInput ? oppDescInput.value.trim() : '';
+  const eligibility = oppEligibilityInput ? oppEligibilityInput.value.trim() : '';
+  const requirements = oppRequirementsInput ? oppRequirementsInput.value.trim() : '';
+  const application_link = oppAppLinkInput ? oppAppLinkInput.value.trim() : '';
+  const is_published = oppPublishedInput ? oppPublishedInput.checked : true;
+
+  if (!title || !description) {
+    showToast('Please fill in both the title and description.', 'error');
+    return;
+  }
+
+  if (btnSaveOpportunity) {
+    btnSaveOpportunity.disabled = true;
+    btnSaveOpportunity.textContent = 'Saving...';
+  }
+
+  const payload = {
+    title,
+    description,
+    eligibility: eligibility || null,
+    requirements: requirements || null,
+    application_link: application_link || null,
+    is_published
+  };
+
+  try {
+    if (editingOppId) {
+      await updateOpportunity(editingOppId, payload);
+      showToast('Opportunity updated successfully', 'success');
+    } else {
+      await createOpportunity(payload);
+      showToast('Opportunity created successfully', 'success');
+    }
+
+    if (opportunityEditorModal) opportunityEditorModal.close();
+    await loadDashboardOpportunities();
+  } catch (err) {
+    console.error('Error saving opportunity:', err);
+    showToast('Failed to save opportunity: ' + err.message, 'error');
+  } finally {
+    if (btnSaveOpportunity) {
+      btnSaveOpportunity.disabled = false;
+      btnSaveOpportunity.textContent = editingOppId ? 'Update Opportunity' : 'Save Opportunity';
+    }
+  }
+}
+
+async function toggleOpportunityPublish(id, currentStatus) {
+  try {
+    const updated = await updateOpportunity(id, { is_published: !currentStatus });
+    showToast(
+      updated.is_published
+        ? 'Opportunity published! Now visible to users.'
+        : 'Opportunity moved to drafts. Hidden from users.',
+      'info'
+    );
+    await loadDashboardOpportunities();
+  } catch (err) {
+    console.error('Failed to toggle opportunity publication:', err);
+    showToast('Failed to change publication status: ' + err.message, 'error');
+  }
+}
+
+function promptDeleteOpportunity(opp) {
+  pendingDeleteOppId = opp.id;
+  if (deleteOppTitleEl) deleteOppTitleEl.textContent = `"${opp.title}"`;
+  if (deleteOppConfirmModal) deleteOppConfirmModal.showModal();
+}
+
+async function handleOpportunityDelete() {
+  if (!pendingDeleteOppId) return;
+
+  if (btnConfirmDeleteOpp) {
+    btnConfirmDeleteOpp.disabled = true;
+    btnConfirmDeleteOpp.textContent = 'Deleting...';
+  }
+
+  try {
+    await deleteOpportunity(pendingDeleteOppId);
+    showToast('Opportunity deleted successfully', 'success');
+    if (deleteOppConfirmModal) deleteOppConfirmModal.close();
+    await loadDashboardOpportunities();
+  } catch (err) {
+    console.error('Error deleting opportunity:', err);
+    showToast('Failed to delete opportunity: ' + err.message, 'error');
+  } finally {
+    if (btnConfirmDeleteOpp) {
+      btnConfirmDeleteOpp.disabled = false;
+      btnConfirmDeleteOpp.textContent = 'Delete Opportunity';
+    }
+    pendingDeleteOppId = null;
   }
 }
 
