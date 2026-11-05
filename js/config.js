@@ -7,22 +7,6 @@ export const ROOMS = {
     'Our Team',
     '<p>Meet the educators, technologists, and industry mentors driving CoBit.</p>'
   ],
-  workshops: [
-    'Workshops',
-    '<p>Five hands-on tracks, run in-school.</p><div class="g"><div><h3>Tech</h3><p>Build something that runs: apps, sites, and how software gets made.</p></div><div><h3>Finance</h3><p>Budgets, markets and money decisions with real numbers.</p></div><div><h3>Marketing</h3><p>Pitch a product, position a brand, learn why campaigns work.</p></div><div><h3>Management</h3><p>Run a team, ship a project, make a manager\'s calls.</p></div><div><h3>Innovation &amp; Startups</h3><p>Turn a rough idea into a pitch a mentor would back.</p></div></div>'
-  ],
-  mentors: [
-    'Mentors',
-    '<p>Every workshop is led by a mentor working in that field right now. Students ask what they cannot ask in a classroom, and hear from someone building a career in it.</p>'
-  ],
-  competitions: [
-    'Competitions & Internships',
-    '<p>Each workshop series closes with a competition. Mentors judge, and the strongest performers are recommended for internships at our partner startups, a first resume line years before college.</p>'
-  ],
-  partners: [
-    'Partner Startups',
-    '<p>A growing group of startups take our top performers as interns, on our recommendation.</p><span class="chip">Tech</span><span class="chip">Fintech</span><span class="chip">Marketing &amp; brand</span><span class="chip">Early-stage</span>'
-  ],
   contact: [
     'Bring CoBit to your school',
     '<p>Principals, mentors and startups, reach out.</p><p><a href="mailto:hello@cobit.example">hello@cobit.example</a></p>'
@@ -35,16 +19,15 @@ export const ROOMS = {
     'Opportunities',
     '<p>Explore open student roles, internships, and opportunities to build with CoBit.</p>'
   ],
-  home: ['CoBit'],
-  how: ['How it works']
+  home: ['Club Home']
 };
 
 export const LANDMARK_NAMES = {
+  home: 'Club Home',
   about: 'About',
-  workshops: 'Workshops',
-  mentors: 'Mentors',
-  competitions: 'Competitions',
-  partners: 'Partners',
+  team: 'Team',
+  projects: 'Projects',
+  opportunities: 'Opportunities',
   contact: 'Contact'
 };
 

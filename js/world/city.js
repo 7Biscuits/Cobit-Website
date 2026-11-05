@@ -694,9 +694,8 @@ const zGoal = (G, x, z, ry) => {
   }
 };
 
-const NMP = ['TOWN HALL', 'POLICE', 'COBIT BANK', 'CITY STADIUM', 'SPORTS PARK', 'GREEN VALLEY SCHOOL', 'FIRE DEPT'];
 const zSign = (G, w, h, t, bg, fg, x, y, z, fs) =>
-  NMP.includes(t) ? null : Gs(G, w, h, txt(Math.round(w * 60), Math.round(h * 60), bg, fg, t, fs), x, y, z);
+  Gs(G, w, h, txt(Math.round(w * 60), Math.round(h * 60), bg, fg, t, fs), x, y, z);
 
 const zRoof = (G, w, d, h, x, y, z, c) => {
   const sh = new THREE.Shape();
@@ -2158,11 +2157,14 @@ export function initCity() {
     campGround(tm, done);
   });
 
-  const CR = { townHall: 'about', cSchool: 'workshops', skyscrapers: 'partners', stadium: 'competitions' };
+  const BN_NAMES = { townHall: 'Town Hall', cPolice: 'Police Station', skyscrapers: 'CoBit Bank', stadium: 'City Stadium', cHospital: 'Hospital', sportsPark: 'Sports Park', cSchool: 'Green Valley School', fireDept: 'Fire Station' };
+  const CR = { townHall: 'about' };
   PLC.forEach(g => {
     const k = CR[g.userData.bn] || 'home';
+    const bName = BN_NAMES[g.userData.bn] || 'CoBit';
     g.traverse(o => {
       if (!o.userData.room) o.userData.room = k;
+      if (!o.userData.buildingName) o.userData.buildingName = bName;
     });
     pickables.push(g);
   });

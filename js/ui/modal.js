@@ -20,8 +20,7 @@ export function initModal() {
     });
   }
 
-  ROOMS.home = ['CoBit'];
-  ROOMS.how = ['How it works'];
+  ROOMS.home = ['Club Home'];
   ROOMS.team = ['Our Team'];
   ROOMS.projects = ['Our Projects'];
   ROOMS.opportunities = ['Opportunities'];
@@ -37,7 +36,7 @@ export function initModal() {
       cam
     );
     const h = ray.intersectObjects(pickables, true);
-    return h.length ? h[0].object.userData.room : null;
+    return h.length ? h[0].object : null;
   }
 
   function goSec(id, smooth) {
@@ -185,15 +184,17 @@ export function initModal() {
 
   // Pointer picking callback
   return function handlePick(e, isClick) {
-    const r = roomAt(e);
+    const obj = roomAt(e);
     if (isClick) {
-      if (r) openRoom(r);
+      if (obj && obj.userData.room) openRoom(obj.userData.room);
     } else {
       const nw = performance.now();
       if (nw - (window.__hv || 0) < 60) return;
       window.__hv = nw;
-      if (r && ROOMS[r]) {
-        tip.textContent = ROOMS[r][0];
+      if (obj) {
+        const r = obj.userData.room;
+        const title = obj.userData.buildingName || (ROOMS[r] ? ROOMS[r][0] : 'CoBit');
+        tip.textContent = title;
         tip.style.left = e.clientX + 'px';
         tip.style.top = e.clientY + 'px';
         tip.classList.add('show');

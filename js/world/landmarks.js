@@ -139,8 +139,8 @@ const rbMach = (g, x, y, z) => {
 };
 
 export const B = {
-  /* ABOUT */
-  about(g) {
+  /* HOME */
+  home(g) {
     rbCurt(g, 14, 4, 7.5, -1, 0, 1.2, 1);
     BX(g, 12, 3.6, 6.5, rbMt(mWH), 1.5, 4.13, -0.2);
     BX(g, 8.4, 1.3, 0.2, rbGls, 1.5, 5.4, -3.58);
@@ -160,8 +160,8 @@ export const B = {
     rbTree(g, 8.8, -4.5, 1);
   },
 
-  /* WORKSHOPS */
-  workshops(g) {
+  /* ABOUT */
+  about(g) {
     rbCurt(g, 18, 4.5, 7, 0, 0, 0.5, 1);
     BX(g, 18, 4.25, 0.4, rbMt(mCC), 0, 0.25, 4.2);
     BX(g, 18.4, 0.3, 7.4, rbMt(mDK), 0, 4.5, 0.5);
@@ -177,8 +177,8 @@ export const B = {
     rbTree(g, 9.2, -3, 1);
   },
 
-  /* MENTORS */
-  mentors(g) {
+  /* TEAM */
+  team(g) {
     rbCurt(g, 12, 4, 8, 0, 0, 0, 1);
     rbCurt(g, 7.5, 12, 6, -0.8, 4, 0.3, 4);
     rbCurt(g, 6, 10, 5, 1.6, 16, 0.6, 3);
@@ -212,8 +212,8 @@ export const B = {
     rbTree(g, 7.6, -6, 1);
   },
 
-  /* COMPETITIONS */
-  competitions(g) {
+  /* PROJECTS */
+  projects(g) {
     CY(g, 3.6, 3.6, 10, rbMt(mCC), 0, 0, 0, 28);
     CY(g, 7.2, 7.2, 5.5, rbGls, 0, 0.25, 0, 40).castShadow = false;
     CY(g, 8.8, 8.8, 0.4, rbMt(mWH), 0, 0, 0, 40);
@@ -237,8 +237,8 @@ export const B = {
     rbSteps(g, 5, -9.4, 3);
   },
 
-  /* PARTNERS */
-  partners(g) {
+  /* OPPORTUNITIES */
+  opportunities(g) {
     rbCurt(g, 14, 4, 8, 0, 0, 0, 1);
     BX(g, 10, 4.5, 7, rbMt(mWH), -2, 4.13, 0);
     BX(g, 10.4, 0.25, 7.4, rbMt(mDK), -2, 8.63, 0);
@@ -277,11 +277,11 @@ export const B = {
 };
 
 const names = {
+  home: 'Club Home',
   about: 'About',
-  workshops: 'Workshops',
-  mentors: 'Mentors',
-  competitions: 'Competitions',
-  partners: 'Partners',
+  team: 'Team',
+  projects: 'Projects',
+  opportunities: 'Opportunities',
   contact: 'Contact'
 };
 
